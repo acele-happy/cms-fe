@@ -1,0 +1,116 @@
+*, *::before, *::after {
+    
+    margin: 0;
+    padding: 0;
+    
+  }
+
+  
+      .navbar-container{
+        width: 100%;
+        background-color:#F8F8F8;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 90px;
+        box-shadow: 0px 15px 10px -20px #000000; 
+      }
+
+
+.logo{
+    font-weight: 500;
+     text-decoration: none;
+    color:#000000;
+    font-size: 35px;
+    margin-left: 100px;
+}
+.logocolor{
+    color: #1E4FFD;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    margin-right: 200px;
+  }
+  .nav-item a {
+  display: inline-block;
+  padding: 10px 15px;
+  text-decoration: none;
+  color:#000000;
+}
+
+.nav-item:hover {
+    font-weight: 400;
+    font-size: 16px;
+    
+  }
+  
+  .nav-item:hover a {
+    color: #000000;
+    font-weight: 500;
+
+  }
+  .logo a {
+    width: 175px;
+    vertical-align: middle;
+  }
+
+  .form-container{
+    background-color: #F8F8F8;
+    width: 550px;
+    height: 320px;
+    position: absolute;
+   margin-top: 50px;
+   margin-left: 32%;
+   border-radius: 10px;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+   
+  }
+  .formcontent h2{
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 40px;
+  }
+  .formcontent h2{
+    font-size: 2em;
+  color: #1E4FFD;
+  text-transform: uppercase;
+  }
+
+  .inputBox{
+  position: relative;
+  width: 80%;
+  border: 1px solid #1E4FFD;
+  outline: none;
+  padding: 15px;
+  border-radius: 4px;
+  color: #fff;
+  font-weight: 500;
+  font-size: 1em;
+  margin-top: 20px;
+  margin-left: 35px;
+  }
+  .btnsubmit{
+    position: relative;
+    width: 50%;
+    background: #1E4FFD;
+    border: none;
+    outline: none;
+    border-radius: 10px;
+    color: #fff;
+    font-weight: 700;
+    font-size: 1em;
+    margin-top: 20px;
+    margin-left:150px;
+    height: 50px;
+    padding: 15px;
+    cursor: pointer;
+  }
