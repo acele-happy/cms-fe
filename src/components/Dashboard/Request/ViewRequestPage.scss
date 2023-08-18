@@ -1,0 +1,82 @@
+body{
+    
+    overflow-y: scroll;
+    height: 100vh;
+    margin: 0px;
+}
+td, th {
+    border: 1px solid #999;
+    padding: 13px;
+  }
+ .myviewtbale{
+  
+  margin-left:10px;
+  overflow-x: auto; // Enable horizontal scrolling
+  width: 100%;
+ 
+
+ }    
+   table {
+    width: 100%;
+        margin-top: 30px;
+        text-align: left;
+        position: relative;
+        border-collapse: collapse; 
+        background-color: #f6f6f6;
+      } 
+  
+      th {
+        background:#272c4a;
+        color: white;
+        border-radius: 0;
+        position: sticky;
+        top: 0;
+        padding: 10px;
+      }
+      .primary{
+        background-color: #000000
+      }
+      
+      tfoot > tr  {
+        background: black;
+        color: white;
+      }
+      tbody > tr:hover {
+        background-color: #818181;
+        color: white;
+      }
+      
+      .updatebtn{
+        color: white;
+        border-radius: 5px;
+        border: none;
+        padding: 5px;
+        background-color: #1E4FFD;
+        cursor: pointer;
+      }
+
+      .pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 20px;
+      }
+      
+      .pagination-btn {
+        background-color: #f0f0f0;
+        border: none;
+        border-radius: 5px;
+        padding: 5px 10px;
+        margin: 0 3px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+      
+      .pagination-btn.active {
+        background-color: #007bff;
+        color: #fff;
+      }
+      
+      .pagination-btn:hover {
+        background-color: #ccc;
+      }
