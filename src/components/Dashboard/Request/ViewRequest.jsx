@@ -34,7 +34,7 @@ const ViewRequest =()=>{
 		<div className="profile">
 
       <img src={profile} alt="profiel" className="pro-img"/>
-			<p>Manoj Adhikari <span>Academic</span></p>
+			<p>Samuel Ndatimana<span>Academic</span></p>
 		</div>
 	</div>
 		<div className="clearfix"></div>
