@@ -34,8 +34,8 @@ const DashboardHome = () => {
         <Link to="/createaccount">
           <AiOutlineTeam /> Manage Accounts
         </Link>
-        <Link to="" z>
-          <AiOutlineLogout /> Logout{" "}
+        <Link to="">
+          <AiOutlineLogout /> Logout
         </Link>
       </div>
 
