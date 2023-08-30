@@ -28,7 +28,7 @@ const LoginForm = () => {
 
     })
     .catch(err=>{
-      console.log(err +"huhhh")
+      console.log(err )
     })
   }
 

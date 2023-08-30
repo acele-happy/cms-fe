@@ -138,3 +138,22 @@ body{
 .content-box{
 	padding: 20px;
 }
+
+.footer-container{
+  position: fixed;
+  bottom: 0;
+  left: 0; 
+  width: 100%; 
+  padding: 10px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #1E4FFD;
+}
+.footer-container p {
+  color: #fff;
+  left: 100px;
+  width: 50%;
+  position: relative;
+}
