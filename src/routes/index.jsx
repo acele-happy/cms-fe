@@ -4,6 +4,7 @@ import Home from '../pages/Home';
 import DashboardHome from '../components/Dashboard/Home/DashboardHome';
 import ViewRequest from '../components/Dashboard/Request/ViewRequest';
 import CreateUserAccount from '../components/Dashboard/CreateAccount/CreateUserAccount';
+import ProtectedRoute from '../utils/ProtectedRoute';
 
 const AppRouter = () => {
   return (
@@ -11,9 +12,21 @@ const AppRouter = () => {
     
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/dashboardHome" element={<DashboardHome/>} />
-        <Route path="/showRequest" element={<ViewRequest/>} />
-        <Route path="/createaccount" element={<CreateUserAccount/>} />
+        <Route path="/dashboardHome" element={
+          <ProtectedRoute>
+            <DashboardHome/>
+          </ProtectedRoute>
+        } />
+        <Route path="/showRequest" element={
+          <ProtectedRoute>
+            <ViewRequest/>
+          </ProtectedRoute>
+        } />
+        <Route path="/createaccount" element={
+          <ProtectedRoute>
+            <CreateUserAccount/>
+          </ProtectedRoute>
+        } />
 
 
         {/* Define other routes here */}

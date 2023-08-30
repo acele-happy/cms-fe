@@ -20,7 +20,7 @@ const CreateUserAccount =()=>{
     <Link to="/showRequest"><AiOutlinePullRequest /> Manage Requests</Link>
     <Link to=""><AiFillFolderOpen /> Manage Reports</Link>
     <Link to="/createaccount"><AiOutlineTeam /> Manage Accounts</Link>
-    <Link to=""><AiOutlineLogout /> Logout </Link>
+    <Link to="" className="logout"><AiOutlineLogout /> Logout </Link>
     
     
     </div>
