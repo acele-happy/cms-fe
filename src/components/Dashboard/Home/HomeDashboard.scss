@@ -40,14 +40,15 @@ body{
     position: absolute;
     top: 0;
     right: 25px;
-    font-size: 36px;
+    font-size: 25px;
   }
   .dashlogo{
-	margin: 0px;
-	margin-left: 28px;
   font-weight: bold;
   color: white;
   margin-bottom: 30px;
+  text-align: center;
+  right: 20px;
+  position: relative;
 }
 .dashlogo span{
 	color: #1E4FFD;
@@ -155,5 +156,10 @@ body{
   color: #fff;
   left: 100px;
   width: 50%;
+  position: relative;
+}
+
+.logout{
+  top: 200px;
   position: relative;
 }
