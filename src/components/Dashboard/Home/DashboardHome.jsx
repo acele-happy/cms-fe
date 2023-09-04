@@ -12,7 +12,7 @@ import {
   AiFillAlert,
 } from "react-icons/ai";
 import profile from "../../../images/profile.png";
-
+import axios from "axios";
 
 const DashboardHome = () => {
 
@@ -20,6 +20,7 @@ const DashboardHome = () => {
   const [role,setRole] = useState("")
   const [display,setDisplay] = useState("block")
   const [top, setTop] = useState("0")
+  const [pending,setPending] = useState("")
 
   useEffect(()=>{
 
@@ -32,6 +33,14 @@ const DashboardHome = () => {
     }
     setName(decoded.name)
     setRole(decoded.role)
+
+    axios.get(`http://localhost:4040/user/pendingNotifications/:${decoded.id}`)
+    .then((res)=>{
+      setPending(res.data)
+    })
+    .catch(err=>{
+      console.log(err)
+    })
   },[])
   const logout = ()=>{
      localStorage.clear()
@@ -87,7 +96,7 @@ const DashboardHome = () => {
         <div class="col-div-3">
           <div class="box">
             <p>
-              67
+              {pending}
               <br />
               <span>Pending Request</span>
             </p>
@@ -96,7 +105,7 @@ const DashboardHome = () => {
             </p>
           </div>
         </div>
-        <div class="col-div-3">
+        <div class="col-div-3" style={{display:`${display}`}}>
           <div class="box">
             <p>
               88
