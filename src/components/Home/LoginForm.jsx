@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import Footer from "../Footer/Footer";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import DashboardHome from "../Dashboard/Home/DashboardHome";
 
 const LoginForm = () => {
 
@@ -23,6 +24,10 @@ const LoginForm = () => {
   
     axios.post("http://localhost:4040/user/login",{email:email,password:password})
     .then((res)=>{
+      if(res.data === "Invalid email or password"){
+        setErrors("Invalid email or password")
+        return
+      }
       localStorage.setItem('token',res.data.token)
       navigate('/dashboardHome')
 
@@ -38,6 +43,7 @@ const LoginForm = () => {
   const handlePasswordChange= (e)=>{
     setPassword(e.target.value)
   }
+
 
   return (
     <>
@@ -69,6 +75,7 @@ const LoginForm = () => {
               type="text"
               placeholder="Your email..."
               required
+              value={email}
               onChange={handleEmailChange}
             />
 
@@ -77,6 +84,7 @@ const LoginForm = () => {
               type="password"
               placeholder="Your password..."
               required
+              value={password}
               onChange={handlePasswordChange}
             />
 

@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./HomeDashboard.scss";
 import { Link } from "react-router-dom";
+import jwtDecode from "jwt-decode";
 import {
   AiFillDashboard,
   AiFillFolderOpen,
@@ -12,9 +13,30 @@ import {
 } from "react-icons/ai";
 import profile from "../../../images/profile.png";
 
-import Footer from "../../Footer/Footer";
 
 const DashboardHome = () => {
+
+  const [name,setName] = useState("")
+  const [role,setRole] = useState("")
+  const [display,setDisplay] = useState("block")
+  const [top, setTop] = useState("0")
+
+  useEffect(()=>{
+
+    const token = localStorage.getItem('token')
+    console.log(jwtDecode(token))
+    const decoded = jwtDecode(token)
+    if(decoded.role != "ACADEMICS"){
+      setDisplay("none")
+      setTop("500px")
+    }
+    setName(decoded.name)
+    setRole(decoded.role)
+  },[])
+  const logout = ()=>{
+     localStorage.clear()
+     location.reload()
+  }
   return (
     <>
       <div id="mySidenav" className="sidenav">
@@ -31,10 +53,10 @@ const DashboardHome = () => {
         <Link to="">
           <AiFillFolderOpen /> Manage Reports
         </Link>
-        <Link to="/createaccount">
+        <Link to="/createaccount" style={{display:`${display}`}}>
           <AiOutlineTeam /> Manage Accounts
         </Link>
-        <Link to="" className="logout">
+        <Link to="" className="logout" onClick={logout} style={{position:'absolute', top:`${top}`}}>
           <AiOutlineLogout /> Logout
         </Link>
       </div>
@@ -51,8 +73,8 @@ const DashboardHome = () => {
           <div className="col-div-6">
             <div className="profile">
               <img src={profile} alt="profiel" className="pro-img" />
-              <p>
-                Samuel Ndatimana<span>Academic</span>
+              <p style={{position:"relative", right: "25px"}}>
+                {name}<span>{role}</span>
               </p>
             </div>
           </div>

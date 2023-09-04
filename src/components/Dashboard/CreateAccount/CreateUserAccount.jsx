@@ -1,6 +1,5 @@
-import React from "react";
+import React,{useEffect} from "react";
 import "./CreateUserAccountPage.scss";
-import HomeDashboard from "../Home/HomeDashboard.scss?inline";
 import { Link } from "react-router-dom";
 import {
   AiFillDashboard,
@@ -14,6 +13,7 @@ import {
 import profile from "../../../images/profile.png";
 
 import Footer from "../../Footer/Footer";
+import jwtDecode from "jwt-decode";
 
 const CreateUserAccount = () => {
   return (
@@ -52,8 +52,8 @@ const CreateUserAccount = () => {
           <div className="col-div-6">
             <div className="profile">
               <img src={profile} alt="profiel" className="pro-img" />
-              <p>
-                Samuel Ndatimana <span>Academic</span>
+              <p style={{position:"relative", right: "25px"}}>
+                happy<span>lect</span>
               </p>
             </div>
           </div>
