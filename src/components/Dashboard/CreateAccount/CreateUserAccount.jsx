@@ -22,6 +22,7 @@ const CreateUserAccount = () => {
   const [displayDepartment, setDisplayDepartment] = useState("none");
   const [displaySalary, setDisplaySalary] = useState("none");
   const [errors, setErrors] = useState("")
+  const [created, setCreated] = useState("")
 
   const [formData, setFormData] = useState({
     fullName: "",
@@ -80,13 +81,25 @@ const CreateUserAccount = () => {
     console.log('hee')
     axios.post("http://localhost:4040/user/register",formData)
     .then(res=>{
-      setErrors("Created!")
+      setCreated("Created!")
     })
     .catch(err=>{
       console.log(err)
       if(err.response.data.code == 11000){
         setErrors("Email Already exists!")
       }
+    })
+  }
+
+  const clear = ()=>{
+    setFormData({
+      fullName: "",
+      email: "",
+      telephone: "",
+      password: "",
+      role: "",
+      department: "",
+      salary: "",
     })
   }
   return (
@@ -136,6 +149,7 @@ const CreateUserAccount = () => {
         <div className="container-form">
           <h2>Register New User</h2>
           <p style={{color: 'red', textAlign:"center"}}>{errors}</p>
+          <p style={{color: 'green', textAlign:"center",fontWeight:"bold"}}>{created}</p>
           <form className="form-details">
             <input
               type="text"
@@ -205,6 +219,9 @@ const CreateUserAccount = () => {
             
             <button type="button" className="sb-btn" onClick={handleSubmit}>
               Register
+            </button>
+            <button type="button" style={{padding:'5px',marginLeft:"30px",width:'70px',border:'none',borderRadius:'5px',color:'white',background:'#ccc',cursor:'pointer'}} onClick={clear}>
+              Clear
             </button>
           </form>
         </div>
