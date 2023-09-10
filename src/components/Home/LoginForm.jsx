@@ -90,7 +90,7 @@ const LoginForm = () => {
             />
 
             {/* <Link to="/dashboardHome"> */}
-              <button className="btnsubmit" onClick={handleLogin}>Login</button>
+              <button className="btnsubmit" onClick={handleLogin} type="button">Login</button>
             {/* </Link> */}
           </form>
         </div>
