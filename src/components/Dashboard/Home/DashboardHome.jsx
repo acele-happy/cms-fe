@@ -13,39 +13,51 @@ import {
 } from "react-icons/ai";
 import profile from "../../../images/profile.png";
 import axios from "axios";
+import {useNavigate} from "react-router-dom"
 
 const DashboardHome = () => {
+  const [name, setName] = useState("");
+  const [role, setRole] = useState("");
+  const [display, setDisplay] = useState("block");
+  const [top, setTop] = useState("0");
+  const [pending, setPending] = useState("");
+  const [numberOfUsers, setNumberOfUsers] = useState("")
 
-  const [name,setName] = useState("")
-  const [role,setRole] = useState("")
-  const [display,setDisplay] = useState("block")
-  const [top, setTop] = useState("0")
-  const [pending,setPending] = useState("")
-
-  useEffect(()=>{
-
-    const token = localStorage.getItem('token')
-    console.log(jwtDecode(token))
-    const decoded = jwtDecode(token)
-    if(decoded.role != "ACADEMICS"){
-      setDisplay("none")
-      setTop("500px")
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    console.log(jwtDecode(token));
+    const decoded = jwtDecode(token);
+    if (decoded.role != "ACADEMICS") {
+      setDisplay("none");
+      setTop("500px");
     }
-    setName(decoded.name)
-    setRole(decoded.role)
+    setName(decoded.name);
+    setRole(decoded.role);
 
-    axios.get(`http://localhost:4040/user/pendingNotifications/:${decoded.id}`)
-    .then((res)=>{
-      setPending(res.data)
-    })
-    .catch(err=>{
-      console.log(err)
-    })
-  },[])
-  const logout = ()=>{
-     localStorage.clear()
-     location.reload()
-  }
+    axios
+      .get(`http://localhost:4040/user/pendingNotifications/:${decoded.id}`)
+      .then((res) => {
+        setPending(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+      axios
+      .get(`http://localhost:4040/user/countUsers`)
+      .then((res) => {
+        setNumberOfUsers(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+  const logout = () => {
+    localStorage.clear();
+    const navigate = useNavigate();
+    navigate("/")
+    window.location.reload()
+  };
   return (
     <>
       <div id="mySidenav" className="sidenav">
@@ -62,10 +74,14 @@ const DashboardHome = () => {
         <Link to="">
           <AiFillFolderOpen /> Manage Reports
         </Link>
-        <Link to="/createaccount" style={{display:`${display}`}}>
+        <Link to="/createaccount" style={{ display: `${display}` }}>
           <AiOutlineTeam /> Manage Accounts
         </Link>
-        <Link to="" className="logout" onClick={logout} style={{position:'absolute', top:`${top}`}}>
+        <Link
+          to=""
+          className="logout"
+          onClick={logout}
+        >
           <AiOutlineLogout /> Logout
         </Link>
       </div>
@@ -82,8 +98,9 @@ const DashboardHome = () => {
           <div className="col-div-6">
             <div className="profile">
               <img src={profile} alt="profiel" className="pro-img" />
-              <p style={{position:"relative", right: "25px"}}>
-                {name}<span>{role}</span>
+              <p style={{ position: "relative", right: "25px" }}>
+                {name}
+                <span>{role}</span>
               </p>
             </div>
           </div>
@@ -105,10 +122,10 @@ const DashboardHome = () => {
             </p>
           </div>
         </div>
-        <div class="col-div-3" style={{display:`${display}`}}>
+        <div class="col-div-3" style={{ display: `${display}` }}>
           <div class="box">
             <p>
-              88
+              {numberOfUsers}
               <br />
               <span>Accounts</span>
             </p>
@@ -123,12 +140,10 @@ const DashboardHome = () => {
         <br />
         <br />
 
-		<div className="footer-container">
-        <p>&copy; 2023 CMS</p>
-      	</div>
+        <div className="footer-container">
+          <p>&copy; 2023 CMS</p>
+        </div>
       </div>
-
-      
     </>
   );
 };

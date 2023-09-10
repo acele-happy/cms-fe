@@ -13,6 +13,7 @@ import {
 import profile from "../../../images/profile.png";
 import jwtDecode from "jwt-decode";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const ViewRequest = () => {
   const [name,setName] = useState("")
@@ -47,7 +48,9 @@ const ViewRequest = () => {
   },[])
   const logout = ()=>{
      localStorage.clear() 
-     location.reload()
+     const navigate = useNavigate()
+     navigate("/")
+     window.location.reload()
   }
   return (
     <>
@@ -68,7 +71,7 @@ const ViewRequest = () => {
         <Link to="/createaccount" style={{display: `${display}`}}>
           <AiOutlineTeam /> Manage Accounts
         </Link>
-        <Link to="" className="logout" onClick={logout} style={{position:"absolute",top:`${top}`}}>
+        <Link to="" className="logout">
           <AiOutlineLogout /> Logout{" "}
         </Link>
       </div>

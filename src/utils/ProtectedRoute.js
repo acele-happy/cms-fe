@@ -7,6 +7,7 @@ const ProtectedRoute = ({ children }) => {
   useEffect(() => {
     if (!localStorage.getItem("token")) {
       navigate("/");
+      window.location.reload()
     }
   }, []);
 
