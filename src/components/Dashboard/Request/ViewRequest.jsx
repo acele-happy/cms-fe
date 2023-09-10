@@ -12,12 +12,16 @@ import {
 } from "react-icons/ai";
 import profile from "../../../images/profile.png";
 import jwtDecode from "jwt-decode";
+import axios from "axios";
 
 const ViewRequest = () => {
   const [name,setName] = useState("")
   const [role,setRole] = useState("")
   const [display,setDisplay] = useState("block")
   const [top, setTop] = useState("0")
+  const [data,setData] = useState([])
+  const [approve,setApprove] = useState("block")
+  const [loading,setLoading] = useState(true)
 
   useEffect(()=>{
 
@@ -30,9 +34,19 @@ const ViewRequest = () => {
     }
     setName(decoded.name)
     setRole(decoded.role)
+
+    axios.get(`http://localhost:4040/user/manageRequests/:${decoded.id}`)
+    .then(res=>{
+      setData(res.data)
+      setLoading(false)
+    })
+    .catch(err=>{ 
+      console.log(err)
+      setLoading(false)
+    })
   },[])
   const logout = ()=>{
-     localStorage.clear()
+     localStorage.clear() 
      location.reload()
   }
   return (
@@ -77,91 +91,44 @@ const ViewRequest = () => {
             </div>
           </div>
           <div className="clearfix"></div>
-        </div>
+        </div> 
 
         <div className="myviewtbale">
+          
           <table>
             <tr>
               <th>No</th>
               <th>Names</th>
               <th>Email</th>
-              <th>Phone</th>
-              <th>Course</th>
-              <th>Status</th>
-              <th>Action</th>
-              <th>Date</th>
+              <th>Telephone</th>
+              <th>Message</th>
+              <th style={{display:`${display}`}}>Action</th>
+              <th>Approve</th>
             </tr>
+            {loading? (<p style={{fontWeight: "bold"}}>Loading...</p>):(
             <tbody>
-              <tr>
-                <td>1</td>
-                <td>Mukamarara Divine</td>
-                <td>mukamaradivine23@gmail.com</td>
-                <td>0789990784</td>
-                <td>advanced web design</td>
-                <td>not approved</td>
-                <td>
+              { data.map((user,index)=>(
+              <tr key={index}>
+                <td>{index+1}</td>
+                <td>{user.names}</td>
+                <td>{user.email}</td>
+                <td>{user.phoneNumber}</td>
+                <td>{user.message}</td>
+                <td style={{display:`${display}`}}>
                   <button className="updatebtn">update</button>
                 </td>
-                <td>22-09-2023</td>
+                <td><button style={{backgroundColor:"green",border: 'none', padding:"5px",borderRadius: "3px",color: "#fff",cursor: "pointer"}}>Approve</button></td>
               </tr>
-
-              <tr>
-                <td>2</td>
-                <td>Mukamarara Divine</td>
-                <td>mukamaradivine23@gmail.com</td>
-                <td>0789990784</td>
-                <td>advanced web design</td>
-                <td>not approved</td>
-                <td>
-                  <button className="updatebtn">update</button>
-                </td>
-                <td>22-09-2023</td>
-              </tr>
-
-              <tr>
-                <td>3</td>
-                <td>Mukamarara Divine</td>
-                <td>mukamaradivine23@gmail.com</td>
-                <td>0789990784</td>
-                <td>advanced web design</td>
-                <td>not approved</td>
-                <td>
-                  <button className="updatebtn">update</button>
-                </td>
-                <td>22-09-2023</td>
-              </tr>
-
-              <tr>
-                <td>4</td>
-                <td>Mukamarara Divine</td>
-                <td>mukamaradivine23@gmail.com</td>
-                <td>0789990784</td>
-                <td>advanced web design</td>
-                <td>not approved</td>
-                <td>
-                  <button className="updatebtn">update</button>
-                </td>
-                <td>22-09-2023</td>
-              </tr>
-              <tr>
-                <td>5</td>
-                <td>Mukamarara Divine</td>
-                <td>mukamaradivine23@gmail.com</td>
-                <td>0789990784</td>
-                <td>advanced web design</td>
-                <td>not approved</td>
-                <td>
-                  <button className="updatebtn">update</button>
-                </td>
-                <td>22-09-2023</td>
-              </tr>
+          ))}
             </tbody>
+                      )}
           </table>
+
           <div class="pagination">
             <button className="pagination-btn">Previous</button>
-            <button className="pagination-btn">1</button>
+            <button className="pagination-btn active">1</button>
             <button className="pagination-btn">2</button>
-            <button className="pagination-btn active">3</button>
+            <button className="pagination-btn">3</button>
             <button className="pagination-btn">4</button>
             <button className="pagination-btn">Next</button>
           </div>

@@ -24,16 +24,17 @@ const LoginForm = () => {
   
     axios.post("http://localhost:4040/user/login",{email:email,password:password})
     .then((res)=>{
-      if(res.data === "Invalid email or password"){
-        setErrors("Invalid email or password")
-        return
-      }
+      console.log("res.message")
       localStorage.setItem('token',res.data.token)
       navigate('/dashboardHome')
 
     })
     .catch(err=>{
-      console.log(err )
+      if(err.response.data == "Invalid email or password"){
+        setErrors("Invalid email or password!")
+        return
+      }
+      console.log((err.response.data== "Invalid email or password"))
     })
   }
 
