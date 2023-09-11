@@ -55,28 +55,54 @@ td, th {
         cursor: pointer;
       }
 
-      .pagination {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin-top: 20px;
-      }
-      
-      .pagination-btn {
-        background-color: #f0f0f0;
-        border: none;
-        border-radius: 5px;
-        padding: 5px 10px;
-        margin: 0 3px;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-      }
-      
-      .pagination-btn.active {
-        background-color: #007bff;
-        color: #fff;
-      }
-      
-      .pagination-btn:hover {
-        background-color: #ccc;
-      }
+     .pagination {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  justify-content: center;
+  gap: 10px;
+}
+
+.pagination-button {
+  padding: 5px 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+  position: relative;
+  top: 10px;
+}
+
+.pagination-button.active {
+  background-color: #0056b3;
+}
+
+.pagination-label {
+  font-size: 16px
+}
+
+
+/* CSS for loading animation */
+@keyframes loading {
+  0% {
+    content: "Loading";
+  }
+  25% {
+    content: "Loading.";
+  }
+  50% {
+    content: "Loading..";
+  }
+  75% {
+    content: "Loading...";
+  }
+}
+
+.loading-text::before {
+  content: "Loading";
+  animation: loading 1.5s infinite;
+  display: inline-block;
+}

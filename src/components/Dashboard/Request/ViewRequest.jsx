@@ -1,4 +1,4 @@
-import React,{useEffect,useState} from "react";
+import React, { useEffect, useState } from "react";
 import "./ViewRequestPage.scss";
 import { Link } from "react-router-dom";
 import {
@@ -14,44 +14,56 @@ import profile from "../../../images/profile.png";
 import jwtDecode from "jwt-decode";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import ReactPaginate from "react-paginate";
 
 const ViewRequest = () => {
-  const [name,setName] = useState("")
-  const [role,setRole] = useState("")
-  const [display,setDisplay] = useState("block")
-  const [top, setTop] = useState("0")
-  const [data,setData] = useState([])
-  const [approve,setApprove] = useState("block")
-  const [loading,setLoading] = useState(true)
+  const [name, setName] = useState("");
+  const [role, setRole] = useState("");
+  const [display, setDisplay] = useState("block");
+  const [top, setTop] = useState("0");
+  const [data, setData] = useState([]);
+  const [approve, setApprove] = useState("block");
+  const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(0); // Current page of the table
+  const usersPerPage = 5; // Number of users to display per page
 
-  useEffect(()=>{
+  const handlePageClick = ({ selected }) => {
+    setCurrentPage(selected);
+  };
 
-    const token = localStorage.getItem('token')
-    console.log(jwtDecode(token))
-    const decoded = jwtDecode(token)
-    if(decoded.role != "ACADEMICS"){
-      setDisplay("none")
-      setTop("500px")
+  const filteredData = data.slice(
+    currentPage * usersPerPage,
+    (currentPage + 1) * usersPerPage
+  );
+  const startIndex = currentPage * usersPerPage;
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    console.log(jwtDecode(token));
+    const decoded = jwtDecode(token);
+    if (decoded.role != "ACADEMICS") {
+      setDisplay("none");
+      setTop("500px");
     }
-    setName(decoded.name)
-    setRole(decoded.role)
+    setName(decoded.name);
+    setRole(decoded.role);
 
-    axios.get(`http://localhost:4040/user/manageRequests/:${decoded.id}`)
-    .then(res=>{
-      setData(res.data)
-      setLoading(false)
-    })
-    .catch(err=>{ 
-      console.log(err)
-      setLoading(false)
-    })
-  },[])
-  const logout = ()=>{
-     localStorage.clear() 
-     const navigate = useNavigate()
-     navigate("/")
-     window.location.reload()
-  }
+    axios
+      .get(`http://localhost:4040/user/manageRequests/:${decoded.id}`)
+      .then((res) => {
+        setData(res.data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        setLoading(false);
+      });
+  }, []);
+  const logout = () => {
+    localStorage.clear();
+    const navigate = useNavigate();
+    navigate("/");
+    window.location.reload();
+  };
   return (
     <>
       <div id="mySidenav" className="sidenav">
@@ -68,7 +80,7 @@ const ViewRequest = () => {
         <Link to="">
           <AiFillFolderOpen /> Manage Reports
         </Link>
-        <Link to="/createaccount" style={{display: `${display}`}}>
+        <Link to="/createaccount" style={{ display: `${display}` }}>
           <AiOutlineTeam /> Manage Accounts
         </Link>
         <Link to="" className="logout">
@@ -88,16 +100,16 @@ const ViewRequest = () => {
           <div className="col-div-6">
             <div className="profile">
               <img src={profile} alt="profiel" className="pro-img" />
-              <p style={{position:"relative", right: "25px"}}>
-                {name}<span>{role}</span>
+              <p style={{ position: "relative", right: "25px" }}>
+                {name}
+                <span>{role}</span>
               </p>
             </div>
           </div>
           <div className="clearfix"></div>
-        </div> 
+        </div>
 
         <div className="myviewtbale">
-          
           <table>
             <tr>
               <th>No</th>
@@ -105,36 +117,60 @@ const ViewRequest = () => {
               <th>Email</th>
               <th>Telephone</th>
               <th>Message</th>
-              <th style={{display:`${display}`}}>Action</th>
+              <th style={{ display: `${display}` }}>Action</th>
               <th>Approve</th>
             </tr>
-            {loading? (<p style={{fontWeight: "bold"}}>Loading...</p>):(
-            <tbody>
-              { data.map((user,index)=>(
-              <tr key={index}>
-                <td>{index+1}</td>
-                <td>{user.names}</td>
-                <td>{user.email}</td>
-                <td>{user.phoneNumber}</td>
-                <td>{user.message}</td>
-                <td style={{display:`${display}`}}>
-                  <button className="updatebtn">update</button>
-                </td>
-                <td><button style={{backgroundColor:"green",border: 'none', padding:"5px",borderRadius: "3px",color: "#fff",cursor: "pointer"}}>Approve</button></td>
-              </tr>
-          ))}
-            </tbody>
-                      )}
+            {loading ? (
+              <p style={{ fontWeight: "bold" }} className="loading-text"></p>
+            ) : (
+              <tbody>
+                {data
+                  .slice(startIndex, startIndex + usersPerPage)
+                  .map((user, index) => (
+                    <tr key={index}>
+                      <td>{startIndex + index + 1}</td>
+                      <td>{user.names}</td>
+                      <td>{user.email}</td>
+                      <td>{user.phoneNumber}</td>
+                      <td>{user.message}</td>
+                      <td style={{ display: `${display}` }}>
+                        <button className="updatebtn">update</button>
+                      </td>
+                      <td>
+                        <button
+                          style={{
+                            backgroundColor: "green",
+                            border: "none",
+                            padding: "5px",
+                            borderRadius: "3px",
+                            color: "#fff",
+                            cursor: "pointer",
+                          }}
+                        >
+                          Approve
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            )}
           </table>
-
-          <div class="pagination">
-            <button className="pagination-btn">Previous</button>
-            <button className="pagination-btn active">1</button>
-            <button className="pagination-btn">2</button>
-            <button className="pagination-btn">3</button>
-            <button className="pagination-btn">4</button>
-            <button className="pagination-btn">Next</button>
-          </div>
+          <ReactPaginate
+            previousLabel={<span className="pagination-label">Prev</span>}
+            nextLabel={<span className="pagination-label">Next</span>}
+            breakLabel={<span className="pagination-label">...</span>}
+            breakClassName={"break-me"}
+            pageCount={Math.ceil(data.length / usersPerPage)}
+            marginPagesDisplayed={2}
+            pageRangeDisplayed={5}
+            onPageChange={handlePageClick}
+            containerClassName={"pagination"}
+            subContainerClassName={"pages pagination"}
+            activeClassName={"active"}
+            pageClassName={"pagination-button"}
+            previousClassName={"pagination-button"}
+            nextClassName={"pagination-button"}
+          />
         </div>
         <div class="clearfix"></div>
         <br />
