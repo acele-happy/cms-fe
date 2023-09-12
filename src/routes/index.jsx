@@ -5,6 +5,7 @@ import DashboardHome from '../components/Dashboard/Home/DashboardHome';
 import ViewRequest from '../components/Dashboard/Request/ViewRequest';
 import CreateUserAccount from '../components/Dashboard/CreateAccount/CreateUserAccount';
 import ProtectedRoute from '../utils/ProtectedRoute';
+import AddRequest from '../components/Dashboard/Request/AddRequest';
 
 const AppRouter = () => {
   return (
@@ -22,6 +23,12 @@ const AppRouter = () => {
             <ViewRequest/>
           </ProtectedRoute>
         } />
+
+      <Route path="/addRequest" element={
+                <ProtectedRoute>
+                  <AddRequest/>
+                </ProtectedRoute>
+              } />
         <Route path="/createaccount" element={
           <ProtectedRoute>
             <CreateUserAccount/>

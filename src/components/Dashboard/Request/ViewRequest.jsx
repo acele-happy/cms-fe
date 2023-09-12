@@ -9,6 +9,8 @@ import {
   AiOutlineMenu,
   AiOutlineLogout,
   AiFillAlert,
+  AiOutlineFolderView,
+  AiFillFolderAdd
 } from "react-icons/ai";
 import profile from "../../../images/profile.png";
 import jwtDecode from "jwt-decode";
@@ -25,12 +27,11 @@ const ViewRequest = () => {
   const [approve, setApprove] = useState("block");
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(0); // Current page of the table
-  const usersPerPage = 5; // Number of users to display per page
+  const usersPerPage = 4; // Number of users to display per page
 
   const handlePageClick = ({ selected }) => {
     setCurrentPage(selected);
   };
-
   const filteredData = data.slice(
     currentPage * usersPerPage,
     (currentPage + 1) * usersPerPage
@@ -74,16 +75,22 @@ const ViewRequest = () => {
         <Link to="/dashboardHome">
           <AiFillDashboard /> Dashboard
         </Link>
+        {role !== "ACADEMICS" && role !== "HOD" && role !== "CP" && role !== "FINANCE" && (
+          <Link to="/addRequest">
+            <AiFillFolderAdd /> Add Requests
+          </Link>
+        )}
         <Link to="/showRequest">
-          <AiOutlinePullRequest /> Manage Requests
+          <AiOutlinePullRequest /> View Requests
+        </Link>
+        
+        <Link to="/createaccount" style={{ display: `${display}` }}>
+          <AiOutlineTeam /> Add Users
         </Link>
         <Link to="">
           <AiFillFolderOpen /> Manage Reports
         </Link>
-        <Link to="/createaccount" style={{ display: `${display}` }}>
-          <AiOutlineTeam /> Manage Accounts
-        </Link>
-        <Link to="" className="logout">
+        <Link to="" className="logout" onClick={logout}>
           <AiOutlineLogout /> Logout{" "}
         </Link>
       </div>
@@ -99,9 +106,9 @@ const ViewRequest = () => {
 
           <div className="col-div-6">
             <div className="profile">
-              <img src={profile} alt="profiel" className="pro-img" />
-              <p style={{ position: "relative", right: "25px" }}>
-                {name}
+            <img src={profile} alt="profiel" className="pro-img" style={{position:"relative",right:"30px"}} />
+              <p style={{ position: "relative", right: "35px" }}>
+                <span style={{color:"#1E4FFD"}}>{name}</span>
                 <span>{role}</span>
               </p>
             </div>
@@ -118,7 +125,11 @@ const ViewRequest = () => {
               <th>Telephone</th>
               <th>Message</th>
               <th style={{ display: `${display}` }}>Action</th>
-              <th>Approve</th>
+              <th>CP</th>
+              <th>Hod</th>
+              <th>Academic</th>
+              <th>Finance</th>
+              
             </tr>
             {loading ? (
               <p style={{ fontWeight: "bold" }} className="loading-text"></p>
@@ -136,6 +147,7 @@ const ViewRequest = () => {
                       <td style={{ display: `${display}` }}>
                         <button className="updatebtn">update</button>
                       </td>
+                     
                       <td>
                         <button
                           style={{
@@ -150,6 +162,19 @@ const ViewRequest = () => {
                           Approve
                         </button>
                       </td>
+                      <td style={{ 
+                            color: "#ff0000", 
+                          }}
+                      >Pending</td>
+                      
+                      <td style={{ 
+                            color: "#ff0000", 
+                      }}>Pending</td>
+                      
+                      <td style={{ 
+                            color: "#ff0000", 
+                      }}>Pending</td>
+                      
                     </tr>
                   ))}
               </tbody>

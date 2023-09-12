@@ -9,6 +9,7 @@ import {
   AiOutlineMenu,
   AiOutlineLogout,
   AiFillAlert,
+  AiFillFolderAdd
 } from "react-icons/ai";
 import profile from "../../../images/profile.png";
 import jwtDecode from "jwt-decode";
@@ -21,31 +22,34 @@ const CreateUserAccount = () => {
   const [role, setRole] = useState("");
   const [displayDepartment, setDisplayDepartment] = useState("none");
   const [displaySalary, setDisplaySalary] = useState("none");
+  const [displayCourse, setDisplayCourse] = useState("none");
   const [errors, setErrors] = useState("")
   const [created, setCreated] = useState("")
 
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
-    telephone: "",
+    phoneNumber: "",
     password: "",
     role: "",
     department: "",
     salary: "",
+    course:""
   });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
 
     if (name === 'role' && value=== 'LECTURER') {
-      if(displayDepartment === "block"){
-        setDisplayDepartment("none")
-      }
       setDisplaySalary("block")
+      setDisplayDepartment("block")
+      setDisplayCourse("block")
     }
-    if(name === 'role' && (value==="CP" || value==="HOD")){
+    if(name === 'role' &&value!="FINANCE"){
       if(displaySalary === "block"){
         setDisplaySalary("none")
+        setDisplayCourse("none")
+        return
       }
       setDisplayDepartment("block")
     }
@@ -53,6 +57,7 @@ const CreateUserAccount = () => {
     if(name==='role' && (value === "ACADEMICS" || value === "FINANCE")){
       setDisplayDepartment("none")
       setDisplaySalary("none")
+      setDisplayCourse("none")
     }
     setFormData({
       ...formData,
@@ -78,10 +83,17 @@ const CreateUserAccount = () => {
       setErrors("Please provide all required fields!")
       return
     }
+    if(formData.phoneNumber.length> 10 || formData.phoneNumber.length <10){
+      setErrors("Phone Number must be 10 numbers!")
+      return
+    }
     console.log('hee')
     axios.post("http://localhost:4040/user/register",formData)
     .then(res=>{
       setCreated("Created!")
+      // setTimeout(()=>{
+      //   setCreated("")
+      // },5000)
     })
     .catch(err=>{
       console.log(err)
@@ -95,11 +107,12 @@ const CreateUserAccount = () => {
     setFormData({
       fullName: "",
       email: "",
-      telephone: "",
+      phoneNumber: "",
       password: "",
       role: "",
       department: "",
       salary: "",
+      course:""
     })
   }
   return (
@@ -112,14 +125,21 @@ const CreateUserAccount = () => {
         <Link to="/dashboardHome">
           <AiFillDashboard /> Dashboard
         </Link>
+        {role !== "ACADEMICS" && role !== "HOD" && role !== "CP" && role !== "FINANCE" && (
+          <Link to="/addRequest">
+            <AiFillFolderAdd /> Add Requests
+          </Link>
+        )}
+
         <Link to="/showRequest">
-          <AiOutlinePullRequest /> Manage Requests
+          <AiOutlinePullRequest /> View Requests
+        </Link>
+       
+        <Link to="/createaccount">
+          <AiOutlineTeam /> Add Users
         </Link>
         <Link to="">
           <AiFillFolderOpen /> Manage Reports
-        </Link>
-        <Link to="/createaccount">
-          <AiOutlineTeam /> Manage Accounts
         </Link>
         <Link to="" className="logout" onClick={logout}>
           <AiOutlineLogout /> Logout{" "}
@@ -137,9 +157,10 @@ const CreateUserAccount = () => {
 
           <div className="col-div-6">
             <div className="profile">
-              <img src={profile} alt="profiel" className="pro-img" />
-              <p style={{ position: "relative", right: "25px" }}>
-                {name}<span>{role}</span>
+            <img src={profile} alt="profiel" className="pro-img" style={{position:"relative",right:"30px"}} />
+              <p style={{ position: "relative", right: "35px" }}>
+                <span style={{color:"#1E4FFD"}}>{name}</span>
+                <span>{role}</span>
               </p>
             </div>
           </div>
@@ -174,8 +195,8 @@ const CreateUserAccount = () => {
               placeholder="Telephone"
               className="inputbox"
               required
-              name="telephone"
-              value={formData.telephone}
+              name="phoneNumber"
+              value={formData.phoneNumber}
               onChange={handleChange}
             />
             <input
@@ -207,6 +228,16 @@ const CreateUserAccount = () => {
               onChange={handleChange}
             />
               <input
+              type="text"
+              placeholder="Course"
+              className="inputbox"
+              required
+              style={{display:`${displayCourse}`}}
+              name="course"
+              value={formData.course}
+              onChange={handleChange}
+            />
+            <input
               type="text"
               placeholder="Salary / RWF"
               className="inputbox"
