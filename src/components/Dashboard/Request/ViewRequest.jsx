@@ -25,7 +25,7 @@ const ViewRequest = () => {
   const [approve, setApprove] = useState("block");
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(0); // Current page of the table
-  const usersPerPage = 5; // Number of users to display per page
+  const usersPerPage = 4; // Number of users to display per page
 
   const handlePageClick = ({ selected }) => {
     setCurrentPage(selected);
@@ -83,7 +83,7 @@ const ViewRequest = () => {
         <Link to="/createaccount" style={{ display: `${display}` }}>
           <AiOutlineTeam /> Manage Accounts
         </Link>
-        <Link to="" className="logout">
+        <Link to="" className="logout" onClick={logout}>
           <AiOutlineLogout /> Logout{" "}
         </Link>
       </div>
@@ -99,9 +99,9 @@ const ViewRequest = () => {
 
           <div className="col-div-6">
             <div className="profile">
-              <img src={profile} alt="profiel" className="pro-img" />
-              <p style={{ position: "relative", right: "25px" }}>
-                {name}
+            <img src={profile} alt="profiel" className="pro-img" style={{position:"relative",right:"30px"}} />
+              <p style={{ position: "relative", right: "35px" }}>
+                <span style={{color:"#1E4FFD"}}>{name}</span>
                 <span>{role}</span>
               </p>
             </div>
