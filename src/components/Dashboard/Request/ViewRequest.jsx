@@ -117,7 +117,6 @@ const ViewRequest = () => {
               <th>Email</th>
               <th>Telephone</th>
               <th>Message</th>
-              <th style={{ display: `${display}` }}>Action</th>
               <th>Approve</th>
             </tr>
             {loading ? (
@@ -133,9 +132,6 @@ const ViewRequest = () => {
                       <td>{user.email}</td>
                       <td>{user.phoneNumber}</td>
                       <td>{user.message}</td>
-                      <td style={{ display: `${display}` }}>
-                        <button className="updatebtn">update</button>
-                      </td>
                       <td>
                         <button
                           style={{
