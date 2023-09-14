@@ -9,6 +9,7 @@ import {
   AiOutlineMenu,
   AiOutlineLogout,
   AiFillAlert,
+  AiFillFolderAdd
 } from "react-icons/ai";
 import profile from "../../../images/profile.png";
 import jwtDecode from "jwt-decode";
@@ -124,14 +125,21 @@ const CreateUserAccount = () => {
         <Link to="/dashboardHome">
           <AiFillDashboard /> Dashboard
         </Link>
+        {role !== "ACADEMICS" && role !== "HOD" && role !== "CP" && role !== "FINANCE" && (
+          <Link to="/addRequest">
+            <AiFillFolderAdd /> Add Requests
+          </Link>
+        )}
+
         <Link to="/showRequest">
-          <AiOutlinePullRequest /> Manage Requests
+          <AiOutlinePullRequest /> View Requests
+        </Link>
+       
+        <Link to="/createaccount">
+          <AiOutlineTeam /> Add Users
         </Link>
         <Link to="">
           <AiFillFolderOpen /> Manage Reports
-        </Link>
-        <Link to="/createaccount">
-          <AiOutlineTeam /> Manage Accounts
         </Link>
         <Link to="" className="logout" onClick={logout}>
           <AiOutlineLogout /> Logout{" "}

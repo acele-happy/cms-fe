@@ -9,6 +9,8 @@ import {
   AiOutlineMenu,
   AiOutlineLogout,
   AiFillAlert,
+  AiOutlineFolderView,
+  AiFillFolderAdd,
 } from "react-icons/ai";
 import profile from "../../../images/profile.png";
 import jwtDecode from "jwt-decode";
@@ -27,10 +29,21 @@ const ViewRequest = () => {
   const [currentPage, setCurrentPage] = useState(0); // Current page of the table
   const usersPerPage = 4; // Number of users to display per page
 
+  const [dispaybtncp, setDisplaybtncp] = useState("none")
+  const [dispaybtnhod, setDisplaybtnhod] = useState("none")
+  const [dispaybtnacademic, setDisplaybtnacademic] = useState("none")
+  const [dispaybtnfinance, setDisplaybtnfinance] = useState("none")
+  const [displaypendingcp, setDisplayendingcp] = useState('block')
+  const [displaypendinghod, setDisplayendinghod] = useState('block')
+  const [displaypendingacademic, setDisplayendingacademic] = useState('block')
+  const [displaypendingfinance, setDisplayendingfinance] = useState('block')
+
+  const [approved,setApproved] = useState("Approve")
+  const [disable,setDisable] = useState(false)
+
   const handlePageClick = ({ selected }) => {
     setCurrentPage(selected);
   };
-
   const filteredData = data.slice(
     currentPage * usersPerPage,
     (currentPage + 1) * usersPerPage
@@ -57,6 +70,23 @@ const ViewRequest = () => {
         console.log(err);
         setLoading(false);
       });
+
+      if(decoded.role === "CP"){
+        setDisplaybtncp("block")
+        setDisplayendingcp('none')
+      }
+      if(decoded.role==="HOD"){
+        setDisplaybtnhod("block")
+        setDisplayendinghod('none')
+      }
+      if(decoded.role==="ACADEMICS"){
+        setDisplaybtnacademic("block")
+        setDisplayendingacademic('none')
+      }
+      if(decoded.role==="FINANCE"){
+        setDisplaybtnfinance('block')
+        setDisplayendingfinance('none')
+      }
   }, []);
   const logout = () => {
     localStorage.clear();
@@ -64,6 +94,17 @@ const ViewRequest = () => {
     navigate("/");
     window.location.reload();
   };
+
+  const confirmRequestCp = (Notid)=>{
+    console.log(Notid)
+    axios.post(`http://localhost:4040/user/confirmPaymentCP/:${Notid}`)
+    .then(res=>{
+      setApproved(res.data)
+    })
+    .catch(err=>{
+      console.log(err)
+    })
+  }
   return (
     <>
       <div id="mySidenav" className="sidenav">
@@ -74,14 +115,23 @@ const ViewRequest = () => {
         <Link to="/dashboardHome">
           <AiFillDashboard /> Dashboard
         </Link>
+        {role !== "ACADEMICS" &&
+          role !== "HOD" &&
+          role !== "CP" &&
+          role !== "FINANCE" && (
+            <Link to="/addRequest">
+              <AiFillFolderAdd /> Add Requests
+            </Link>
+          )}
         <Link to="/showRequest">
-          <AiOutlinePullRequest /> Manage Requests
+          <AiOutlinePullRequest /> View Requests
+        </Link>
+
+        <Link to="/createaccount" style={{ display: `${display}` }}>
+          <AiOutlineTeam /> Add Users
         </Link>
         <Link to="">
           <AiFillFolderOpen /> Manage Reports
-        </Link>
-        <Link to="/createaccount" style={{ display: `${display}` }}>
-          <AiOutlineTeam /> Manage Accounts
         </Link>
         <Link to="" className="logout" onClick={logout}>
           <AiOutlineLogout /> Logout{" "}
@@ -99,9 +149,14 @@ const ViewRequest = () => {
 
           <div className="col-div-6">
             <div className="profile">
-            <img src={profile} alt="profiel" className="pro-img" style={{position:"relative",right:"30px"}} />
+              <img
+                src={profile}
+                alt="profiel"
+                className="pro-img"
+                style={{ position: "relative", right: "30px" }}
+              />
               <p style={{ position: "relative", right: "35px" }}>
-                <span style={{color:"#1E4FFD"}}>{name}</span>
+                <span style={{ color: "#1E4FFD" }}>{name}</span>
                 <span>{role}</span>
               </p>
             </div>
@@ -113,11 +168,15 @@ const ViewRequest = () => {
           <table>
             <tr>
               <th>No</th>
-              <th>Names</th>
+              {/* <th>Names</th>
               <th>Email</th>
-              <th>Telephone</th>
+              <th>Telephone</th> */}
               <th>Message</th>
-              <th>Approve</th>
+              <th style={{ display: `${display}` }}>Action</th>
+              <th>CP</th>
+              <th>Hod</th>
+              <th>Academic</th>
+              <th>Finance</th>
             </tr>
             {loading ? (
               <p style={{ fontWeight: "bold" }} className="loading-text"></p>
@@ -128,11 +187,17 @@ const ViewRequest = () => {
                   .map((user, index) => (
                     <tr key={index}>
                       <td>{startIndex + index + 1}</td>
-                      <td>{user.names}</td>
+                      {/* <td>{user.names}</td>
                       <td>{user.email}</td>
-                      <td>{user.phoneNumber}</td>
+                      <td>{user.phoneNumber}</td> */}
                       <td>{user.message}</td>
-                      <td>
+                      <td style={{ display: `${display}` }}>
+                        <button className="updatebtn">update</button>
+                      </td>
+
+                      <td style={{
+                          color: "#ff0000",
+                        }}>
                         <button
                           style={{
                             backgroundColor: "green",
@@ -141,10 +206,75 @@ const ViewRequest = () => {
                             borderRadius: "3px",
                             color: "#fff",
                             cursor: "pointer",
+                            display:`${dispaybtncp}`
+                          }}
+                          onClick={()=>confirmRequestCp(user.notId)}
+                        >
+                          Approve
+                        </button>
+                        <span style={{display:`${displaypendingcp}`,color:user.cp === "Approved"?'green' : 'red'}}>{user.cp}</span>
+                      </td>
+                      <td
+                        style={{
+                          color: "#ff0000",
+                        }}
+                      >
+                        <button
+                          style={{
+                            backgroundColor: "green",
+                            border: "none",
+                            padding: "5px",
+                            borderRadius: "3px",
+                            color: "#fff",
+                            cursor: "pointer",
+                            display:`${dispaybtnhod}`
                           }}
                         >
                           Approve
                         </button>
+                        <span style={{display:`${displaypendinghod}`,color:user.hod === "Approved"?'green' : 'red'}}>{user.hod}</span>
+                      </td>
+
+                      <td
+                        style={{
+                          color: "#ff0000",
+                        }}
+                      >
+                        <button
+                          style={{
+                            backgroundColor: "green",
+                            border: "none",
+                            padding: "5px",
+                            borderRadius: "3px",
+                            color: "#fff",
+                            cursor: "pointer",
+                            display:`${dispaybtnacademic}`
+                          }}
+                        >
+                          Approve
+                        </button>
+                        <span style={{display:`${displaypendingacademic}`,color:user.academic === "Approved"?'green' : 'red'}}>{user.academic}</span>
+                      </td>
+
+                      <td
+                        style={{
+                          color: "#ff0000",
+                        }}
+                      >
+                        <button
+                          style={{
+                            backgroundColor: "green",
+                            border: "none",
+                            padding: "5px",
+                            borderRadius: "3px",
+                            color: "#fff",
+                            cursor: "pointer",
+                            display:`${dispaybtnfinance}`
+                          }}
+                        >
+                          Approve
+                        </button>
+                        <span style={{display:`${displaypendingfinance}`,color:user.finance === "Approved"?'green' : 'red'}}>{user.finance}</span>
                       </td>
                     </tr>
                   ))}
