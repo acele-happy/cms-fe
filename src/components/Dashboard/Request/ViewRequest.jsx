@@ -29,17 +29,25 @@ const ViewRequest = () => {
   const [currentPage, setCurrentPage] = useState(0); // Current page of the table
   const usersPerPage = 4; // Number of users to display per page
 
-  const [dispaybtncp, setDisplaybtncp] = useState("none")
-  const [dispaybtnhod, setDisplaybtnhod] = useState("none")
-  const [dispaybtnacademic, setDisplaybtnacademic] = useState("none")
-  const [dispaybtnfinance, setDisplaybtnfinance] = useState("none")
-  const [displaypendingcp, setDisplayendingcp] = useState('block')
-  const [displaypendinghod, setDisplayendinghod] = useState('block')
-  const [displaypendingacademic, setDisplayendingacademic] = useState('block')
-  const [displaypendingfinance, setDisplayendingfinance] = useState('block')
+  const [dispaybtncp, setDisplaybtncp] = useState("none");
+  const [dispaybtnhod, setDisplaybtnhod] = useState("none");
+  const [dispaybtnacademic, setDisplaybtnacademic] = useState("none");
+  const [dispaybtnfinance, setDisplaybtnfinance] = useState("none");
+  const [displaypendingcp, setDisplayendingcp] = useState("block");
+  const [displaypendinghod, setDisplayendinghod] = useState("block");
+  const [displaypendingacademic, setDisplayendingacademic] = useState("block");
+  const [displaypendingfinance, setDisplayendingfinance] = useState("block");
 
-  const [approved,setApproved] = useState("Approve")
-  const [disable,setDisable] = useState(false)
+  const [approvedcpArray, setApprovedcpArray] = useState(data.map(() => false));
+  const [approvedhodArray, setApprovedhodArray] = useState(
+    data.map(() => false)
+  );
+  const [approvedacademicArray, setApprovedacademicArray] = useState(
+    data.map(() => false)
+  );
+  const [approvedfinanceArray, setApprovedfinanceArray] = useState(
+    data.map(() => false)
+  );
 
   const handlePageClick = ({ selected }) => {
     setCurrentPage(selected);
@@ -71,22 +79,22 @@ const ViewRequest = () => {
         setLoading(false);
       });
 
-      if(decoded.role === "CP"){
-        setDisplaybtncp("block")
-        setDisplayendingcp('none')
-      }
-      if(decoded.role==="HOD"){
-        setDisplaybtnhod("block")
-        setDisplayendinghod('none')
-      }
-      if(decoded.role==="ACADEMICS"){
-        setDisplaybtnacademic("block")
-        setDisplayendingacademic('none')
-      }
-      if(decoded.role==="FINANCE"){
-        setDisplaybtnfinance('block')
-        setDisplayendingfinance('none')
-      }
+    if (decoded.role === "CP") {
+      setDisplaybtncp("block");
+      setDisplayendingcp("none");
+    }
+    if (decoded.role === "HOD") {
+      setDisplaybtnhod("block");
+      setDisplayendinghod("none");
+    }
+    if (decoded.role === "ACADEMICS") {
+      setDisplaybtnacademic("block");
+      setDisplayendingacademic("none");
+    }
+    if (decoded.role === "FINANCE") {
+      setDisplaybtnfinance("block");
+      setDisplayendingfinance("none");
+    }
   }, []);
   const logout = () => {
     localStorage.clear();
@@ -95,16 +103,58 @@ const ViewRequest = () => {
     window.location.reload();
   };
 
-  const confirmRequestCp = (Notid)=>{
-    console.log(Notid)
-    axios.post(`http://localhost:4040/user/confirmPaymentCP/:${Notid}`)
-    .then(res=>{
-      setApproved(res.data)
-    })
-    .catch(err=>{
-      console.log(err)
-    })
-  }
+  const confirmRequestCp = (index, Notid) => {
+    axios
+      .post(`http://localhost:4040/user/confirmPaymentCP/:${Notid}`)
+      .then((res) => {
+        const updatedApprovedCpArray = [...approvedcpArray];
+        updatedApprovedCpArray[index] = true;
+        setApprovedcpArray(updatedApprovedCpArray);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const confirmRequestHod = (index, Notid) => {
+    axios
+      .post(`http://localhost:4040/user/confirmPaymentHOD/:${Notid}`)
+      .then((res) => {
+        const updatedApprovedhodArray = [...approvedhodArray];
+        updatedApprovedhodArray[index] = true;
+        setApprovedhodArray(updatedApprovedhodArray);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const confirmRequestAcademic = (index, Notid) => {
+    axios
+      .post(`http://localhost:4040/user/confirmPaymentAcademic/:${Notid}`)
+      .then((res) => {
+        const updatedApprovedacademicArray = [...approvedacademicArray];
+        updatedApprovedacademicArray[index] = true;
+        setApprovedacademicArray(updatedApprovedacademicArray);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const confirmRequestFinance = (index, Notid) => {
+    axios
+      .post(`http://localhost:4040/user/confirmPaymentFinance/:${Notid}`)
+      .then((res) => {
+        const updatedApprovedfinanceArray = [...approvedfinanceArray];
+        updatedApprovedfinanceArray[index] = true;
+        setApprovedfinanceArray(updatedApprovedfinanceArray);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <>
       <div id="mySidenav" className="sidenav">
@@ -168,11 +218,9 @@ const ViewRequest = () => {
           <table>
             <tr>
               <th>No</th>
-              {/* <th>Names</th>
+              <th>Names</th>
               <th>Email</th>
-              <th>Telephone</th> */}
               <th>Message</th>
-              <th style={{ display: `${display}` }}>Action</th>
               <th>CP</th>
               <th>Hod</th>
               <th>Academic</th>
@@ -187,73 +235,83 @@ const ViewRequest = () => {
                   .map((user, index) => (
                     <tr key={index}>
                       <td>{startIndex + index + 1}</td>
-                      {/* <td>{user.names}</td>
+                      <td>{user.names}</td>
                       <td>{user.email}</td>
-                      <td>{user.phoneNumber}</td> */}
                       <td>{user.message}</td>
-                      <td style={{ display: `${display}` }}>
-                        <button className="updatebtn">update</button>
-                      </td>
-
-                      <td style={{
-                          color: "#ff0000",
-                        }}>
-                        <button
-                          style={{
-                            backgroundColor: "green",
-                            border: "none",
-                            padding: "5px",
-                            borderRadius: "3px",
-                            color: "#fff",
-                            cursor: "pointer",
-                            display:`${dispaybtncp}`
-                          }}
-                          onClick={()=>confirmRequestCp(user.notId)}
-                        >
-                          Approve
-                        </button>
-                        <span style={{display:`${displaypendingcp}`,color:user.cp === "Approved"?'green' : 'red'}}>{user.cp}</span>
-                      </td>
-                      <td
-                        style={{
-                          color: "#ff0000",
-                        }}
-                      >
-                        <button
-                          style={{
-                            backgroundColor: "green",
-                            border: "none",
-                            padding: "5px",
-                            borderRadius: "3px",
-                            color: "#fff",
-                            cursor: "pointer",
-                            display:`${dispaybtnhod}`
-                          }}
-                        >
-                          Approve
-                        </button>
-                        <span style={{display:`${displaypendinghod}`,color:user.hod === "Approved"?'green' : 'red'}}>{user.hod}</span>
-                      </td>
 
                       <td
                         style={{
                           color: "#ff0000",
                         }}
                       >
+                        <div style={{ display: `${dispaybtncp}` }}>
+                          {user.cp === "Approved" ? (
+                            <span style={{ color: "green" }}>Approved</span>
+                          ) : (
+                            <button
+                              style={{
+                                backgroundColor: approvedcpArray[index]
+                                  ? "#035603"
+                                  : "#008000",
+                                border: "none",
+                                padding: "5px",
+                                borderRadius: "3px",
+                                color: "#fff",
+                                cursor: "pointer",
+                              }}
+                              onClick={() =>
+                                confirmRequestCp(index, user.notId)
+                              }
+                              disabled={approvedcpArray[index]}
+                            >
+                              {approvedcpArray[index] ? "Approved" : "Approve"}
+                            </button>
+                          )}
+                        </div>
+                        <span
+                          style={{
+                            display: `${displaypendingcp}`,
+                            color: user.cp === "Approved" ? "green" : "red",
+                          }}
+                        >
+                          {user.cp}
+                        </span>
+                      </td>
+                      <td
+                        style={{
+                          color: "#ff0000",
+                        }}
+                      >
+                        <div style={{display:`${dispaybtnhod}`}}>
+                          {user.hod === "Approved"?(
+                            <span style={{color:'green'}}>Approved</span>
+                          ):(
                         <button
                           style={{
-                            backgroundColor: "green",
+                            backgroundColor: approvedhodArray[index]
+                              ? "#035603"
+                              : "#008000",
                             border: "none",
                             padding: "5px",
                             borderRadius: "3px",
                             color: "#fff",
                             cursor: "pointer",
-                            display:`${dispaybtnacademic}`
+                          }}
+                          onClick={() => confirmRequestHod(index, user.notId)}
+                          disabled={approvedhodArray[index]}
+                        >
+                          {approvedhodArray[index] ? "Approved" : "Approve"}
+                        </button>
+                        )}
+                        </div>
+                        <span
+                          style={{
+                            display: `${displaypendinghod}`,
+                            color: user.hod === "Approved" ? "green" : "red",
                           }}
                         >
-                          Approve
-                        </button>
-                        <span style={{display:`${displaypendingacademic}`,color:user.academic === "Approved"?'green' : 'red'}}>{user.academic}</span>
+                          {user.hod}
+                        </span>
                       </td>
 
                       <td
@@ -261,20 +319,82 @@ const ViewRequest = () => {
                           color: "#ff0000",
                         }}
                       >
+                        <div style={{display: `${dispaybtnacademic}`}}>
+                          {user.academic === "Approved" ?(
+                            <span style={{color:'green'}}>Approved</span>
+                          ):(
                         <button
                           style={{
-                            backgroundColor: "green",
+                            backgroundColor: approvedacademicArray[index]
+                              ? "#035603"
+                              : "#008000",
                             border: "none",
                             padding: "5px",
                             borderRadius: "3px",
                             color: "#fff",
                             cursor: "pointer",
-                            display:`${dispaybtnfinance}`
+                          }}
+                          onClick={() =>
+                            confirmRequestAcademic(index, user.notId)
+                          }
+                          disabled={approvedacademicArray[index]}
+                        >
+                          {approvedacademicArray[index]
+                            ? "Approved"
+                            : "Approve"}
+                        </button>
+                        )}
+                        </div>
+                        <span
+                          style={{
+                            display: `${displaypendingacademic}`,
+                            color:
+                              user.academic === "Approved" ? "green" : "red",
                           }}
                         >
-                          Approve
+                          {user.academic}
+                        </span>
+                      </td>
+
+                      <td
+                        style={{
+                          color: "#ff0000",
+                        }}
+                      >
+                       <div style={{ display: `${dispaybtnfinance}`}}>
+                        {user.finance === "Approved"?(
+                          <span style={{color:'green'}}>Approved</span>
+                        ):(
+                       <button
+                          style={{
+                            backgroundColor: approvedfinanceArray[index]
+                              ? "#035603"
+                              : "#008000",
+                            border: "none",
+                            padding: "5px",
+                            borderRadius: "3px",
+                            color: "#fff",
+                            cursor: "pointer",
+
+                          }}
+                          onClick={() =>
+                            confirmRequestFinance(index, user.notId)
+                          }
+                          disabled={approvedfinanceArray[index]}
+                        >
+                          {approvedfinanceArray[index] ? "Approved" : "Approve"}
                         </button>
-                        <span style={{display:`${displaypendingfinance}`,color:user.finance === "Approved"?'green' : 'red'}}>{user.finance}</span>
+                        )}
+                       </div>
+                        <span
+                          style={{
+                            display: `${displaypendingfinance}`,
+                            color:
+                              user.finance === "Approved" ? "green" : "red",
+                          }}
+                        >
+                          {user.finance}
+                        </span>
                       </td>
                     </tr>
                   ))}
