@@ -112,7 +112,7 @@ const ViewRequest = () => {
         setApprovedcpArray(updatedApprovedCpArray);
       })
       .catch((err) => {
-        console.log(err);
+        alert(err.response.data)
       });
   };
 
@@ -125,7 +125,7 @@ const ViewRequest = () => {
         setApprovedhodArray(updatedApprovedhodArray);
       })
       .catch((err) => {
-        console.log(err);
+        alert(err.response.data)
       });
   };
 
@@ -138,7 +138,7 @@ const ViewRequest = () => {
         setApprovedacademicArray(updatedApprovedacademicArray);
       })
       .catch((err) => {
-        console.log(err);
+        alert(err.response.data)
       });
   };
 
@@ -151,7 +151,7 @@ const ViewRequest = () => {
         setApprovedfinanceArray(updatedApprovedfinanceArray);
       })
       .catch((err) => {
-        console.log(err);
+        alert(err.response.data)
       });
   };
 
