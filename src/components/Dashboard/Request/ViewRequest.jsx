@@ -17,6 +17,9 @@ import jwtDecode from "jwt-decode";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import ReactPaginate from "react-paginate";
+import Modal from "react-modal"
+
+Modal.setAppElement("#root")
 
 const ViewRequest = () => {
   const [name, setName] = useState("");
@@ -48,6 +51,9 @@ const ViewRequest = () => {
   const [approvedfinanceArray, setApprovedfinanceArray] = useState(
     data.map(() => false)
   );
+
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handlePageClick = ({ selected }) => {
     setCurrentPage(selected);
@@ -103,6 +109,14 @@ const ViewRequest = () => {
     window.location.reload();
   };
 
+  const openModal = () => {
+    setModalIsOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalIsOpen(false);
+  };
+
   const confirmRequestCp = (index, Notid) => {
     axios
       .post(`http://localhost:4040/user/confirmPaymentCP/:${Notid}`)
@@ -112,7 +126,8 @@ const ViewRequest = () => {
         setApprovedcpArray(updatedApprovedCpArray);
       })
       .catch((err) => {
-        alert(err.response.data)
+        setErrorMessage(err.response.data);
+        openModal();
       });
   };
 
@@ -125,7 +140,8 @@ const ViewRequest = () => {
         setApprovedhodArray(updatedApprovedhodArray);
       })
       .catch((err) => {
-        alert(err.response.data)
+        setErrorMessage(err.response.data);
+        openModal();
       });
   };
 
@@ -138,7 +154,8 @@ const ViewRequest = () => {
         setApprovedacademicArray(updatedApprovedacademicArray);
       })
       .catch((err) => {
-        alert(err.response.data)
+        setErrorMessage(err.response.data);
+        openModal();
       });
   };
 
@@ -151,7 +168,8 @@ const ViewRequest = () => {
         setApprovedfinanceArray(updatedApprovedfinanceArray);
       })
       .catch((err) => {
-        alert(err.response.data)
+        setErrorMessage(err.response.data);
+        openModal();
       });
   };
 
@@ -213,7 +231,31 @@ const ViewRequest = () => {
           </div>
           <div className="clearfix"></div>
         </div>
-
+        <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        style={{
+          overlay: {
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+          },
+          content: {
+            top: "50%",
+            left: "60%",
+            right: "auto",
+            bottom: "auto",
+            marginRight: "-50%",
+            transform: "translate(-50%, -50%)",
+            width: '40%',
+            height: '100px',
+            textAlign:'center',
+            justifyContent:'center',
+          },
+        }}
+      >
+        <h2 style={{color:"#FF9494"}}>Error!</h2>
+        <div>{errorMessage}</div>
+        <button onClick={closeModal} style={{marginTop:'20px',border:'none',background:'red',color:'#fff',borderRadius:'3px',padding:'8px',fontWeight:'bold',cursor:'pointer'}}>Close</button>
+      </Modal>
         <div className="myviewtbale">
           <table>
             <tr>

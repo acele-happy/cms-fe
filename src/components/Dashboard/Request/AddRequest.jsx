@@ -23,6 +23,7 @@ const AddRequest = () => {
   const [message, setMessage] = useState("")
   const [userId,setUserId] = useState("")
   const [success,setSuccess] = useState("")
+  const [error, setError] = useState("")
 
   useEffect(()=>{
     const token = localStorage.getItem("token");
@@ -52,7 +53,8 @@ const AddRequest = () => {
       },5000)
     })
     .catch(err=>{
-      alert(err.response.data)
+      // alert(err.response.data)
+      setError(err.response.data)
     })
   }
 
@@ -115,6 +117,7 @@ const AddRequest = () => {
         <div className="container-form">
           <h2>Fill Form To Send Request</h2>
           <p style={{color:'green',textAlign:'center'}}>{success}</p>
+          <p style={{color:'red'}}>{error}</p>
           <form className="form-details">
             <div style={{ position: "relative", top: "10px", right: "-150px" }}>
               {/* <input
