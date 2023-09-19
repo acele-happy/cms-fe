@@ -80,7 +80,7 @@ const AddRequest = () => {
         <Link to="/showRequest">
           <AiOutlinePullRequest /> View Requests
         </Link>
-        <Link to="">
+        <Link to="/managereports">
           <AiFillFolderOpen /> Manage Reports
         </Link>
 
