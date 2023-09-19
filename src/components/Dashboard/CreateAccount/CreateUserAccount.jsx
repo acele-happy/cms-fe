@@ -138,7 +138,10 @@ const CreateUserAccount = () => {
         <Link to="/createaccount">
           <AiOutlineTeam /> Add Users
         </Link>
-        <Link to="">
+        <Link to="/viewusers">
+          <AiOutlineTeam /> View Users 
+        </Link>
+        <Link to="/notficationreport">
           <AiFillFolderOpen /> Manage Reports
         </Link>
         <Link to="" className="logout" onClick={logout}>

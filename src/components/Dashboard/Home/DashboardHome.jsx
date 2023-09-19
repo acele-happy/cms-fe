@@ -85,7 +85,11 @@ const DashboardHome = () => {
         <Link to="/createaccount" style={{ display: `${display}` }}>
           <AiOutlineTeam /> Add Users
         </Link>
-        <Link to="">
+
+        <Link to="/viewusers">
+          <AiOutlineTeam /> View Users 
+        </Link>
+        <Link to="/notficationreport">
           <AiFillFolderOpen /> Manage Reports
         </Link>
         <Link

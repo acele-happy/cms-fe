@@ -80,7 +80,10 @@ const AddRequest = () => {
         <Link to="/showRequest">
           <AiOutlinePullRequest /> View Requests
         </Link>
-        <Link to="">
+        <Link to="/viewusers">
+          <AiOutlineTeam /> View Users 
+        </Link>
+        <Link to="/notficationreport">
           <AiFillFolderOpen /> Manage Reports
         </Link>
 
@@ -94,7 +97,7 @@ const AddRequest = () => {
           <div className="col-div-6">
             <span className="nav">
               {" "}
-              <AiOutlinePullRequest /> Manage Account
+              <AiOutlinePullRequest /> Manage Request
             </span>
           </div>
 
