@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "./ViewRequestPage.scss";
+import "./NotficationsReportsPage.scss";
 import { Link } from "react-router-dom";
 import {
   AiFillDashboard,
@@ -21,7 +21,7 @@ import Modal from "react-modal";
 
 Modal.setAppElement("#root");
 
-const ViewRequest = () => {
+const NotificationsReport = () => {
   const [name, setName] = useState("");
   const [role, setRole] = useState("");
   const [display, setDisplay] = useState("block");
@@ -214,7 +214,7 @@ const ViewRequest = () => {
           <div class="col-div-6">
             <span className="nav">
               {" "}
-              <AiOutlinePullRequest /> Manage Pending Request
+              <AiOutlinePullRequest /> Manage Daily & Monthly Report Request
             </span>
           </div>
 
@@ -272,7 +272,36 @@ const ViewRequest = () => {
           >
             Close
           </button>
-        </Modal>
+            </Modal>
+              
+            <div className="container-reportform">
+          <h2>Make Report Based on Date </h2>
+          <form className="form-details">
+            <div className="contain-field">
+            <input
+              type="date"
+              placeholder="From Date"
+              className="inputboxs"
+              required
+              name="fromdate"
+           
+            />
+            <input
+              type="date"
+              placeholder="To Date"
+              className="inputboxs"
+              required
+              name="todate"
+                          />
+              </div>
+
+            <button type="button" className="sb-btn" >
+              Show Report
+            </button>
+           
+          </form>
+        </div>
+
         <div className="myviewtbale">
           <table>
             <tr>
@@ -492,4 +521,4 @@ const ViewRequest = () => {
   );
 };
 
-export default ViewRequest;
+export default NotificationsReport;

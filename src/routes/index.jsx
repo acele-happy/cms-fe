@@ -6,7 +6,8 @@ import ViewRequest from "../components/Dashboard/Request/ViewRequest";
 import CreateUserAccount from "../components/Dashboard/CreateAccount/CreateUserAccount";
 import ProtectedRoute from "../utils/ProtectedRoute";
 import AddRequest from "../components/Dashboard/Request/AddRequest";
-import ManageReports from "../components/Dashboard/ManageReports/ManageReports";
+import ManageUsers from "../components/Dashboard/ViewUsers/ViewUsers";
+import NotficationReports from "../components/Dashboard/Reports/NotficationsReport";
 
 const AppRouter = () => {
   return (
@@ -48,10 +49,18 @@ const AppRouter = () => {
         />
 
         <Route
-          path="/managereports"
+          path="/viewusers"
           element={
             <ProtectedRoute>
-              <ManageReports />
+              <ManageUsers />
+            </ProtectedRoute>
+          }
+        />
+         <Route
+          path="/notficationreport"
+          element={
+            <ProtectedRoute>
+              <NotficationReports />
             </ProtectedRoute>
           }
         />
