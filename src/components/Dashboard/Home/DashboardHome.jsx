@@ -86,11 +86,11 @@ const DashboardHome = () => {
           <AiOutlineTeam /> Add Users
         </Link>
 
-        <Link to="/viewusers">
+        <Link to="/viewusers" style={{ display: `${display}` }}>
           <AiOutlineTeam /> View Users 
         </Link>
-        <Link to="/notficationreport">
-          <AiFillFolderOpen /> Manage Reports
+        <Link to="/notficationreport" style={{ display: `${display}` }}>
+          <AiFillFolderOpen/> Manage Reports
         </Link>
         <Link
           to=""

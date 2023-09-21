@@ -30,7 +30,6 @@ const ManageReports = () => {
   const [display, setDisplay] = useState("block");
   const [top, setTop] = useState("0");
   const [data, setData] = useState([]);
-  const [approve, setApprove] = useState("block");
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(0); // Current page of the table
   const usersPerPage = 4; // Number of users to display per page
@@ -38,7 +37,8 @@ const ManageReports = () => {
 const [userData,setUserData] = useState([])
 
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [updateModalIsOpen, setUpdateModalIsOpen] = useState(false);
+  const [displayDelete, setDisplayDelete] = useState("block");
 
   const handlePageClick = ({ selected }) => {
     setCurrentPage(selected);
@@ -86,6 +86,14 @@ const [userData,setUserData] = useState([])
     setModalIsOpen(false);
   };
 
+  const openUpdateModal = () => {
+    setUpdateModalIsOpen(true);
+  };
+
+  const closeUpdateModal = () => {
+    setUpdateModalIsOpen(false);
+  };
+
   const ViewDetails=(id)=>{
     axios.get(`http://localhost:4040/user/getUserById/${id}`)
     .then(res=>{
@@ -94,6 +102,17 @@ const [userData,setUserData] = useState([])
     })
     .catch(err=>{
         console.log(err)
+    })
+  }
+
+  const deleteUser = (id)=>{
+    console.log(id)
+    axios.delete(`http://localhost:4040/user/delete/:${id}`)
+    .then(res=>{
+      window.location.reload()
+    })
+    .catch(err=>{
+      console.log(err)
     })
   }
 
@@ -122,10 +141,10 @@ const [userData,setUserData] = useState([])
         <Link to="/createaccount" style={{ display: `${display}` }}>
           <AiOutlineTeam /> Add Users
         </Link>
-        <Link to="/viewusers">
+        <Link to="/viewusers" style={{ display: `${display}` }}>
           <AiOutlineTeam /> View Users 
         </Link>
-        <Link to="/notficationreport">
+        <Link to="/notficationreport" style={{ display: `${display}` }}>
           <AiFillFolderOpen /> Manage Reports
         </Link>
         <Link to="" className="logout" onClick={logout}>
@@ -173,14 +192,12 @@ const [userData,setUserData] = useState([])
               marginRight: "-50%",
               transform: "translate(-50%, -50%)",
               width: "40%",
-              height: "100px",
-              // textAlign: "center",
-              // justifyContent: "center",
+              height: "auto",
             },
           }}
         >
           <h2 style={{textAlign:'center'}}>{userData.fullName}'s Details</h2>
-         <div style={{display:'flex',background:"red"}}>
+         <div style={{display:'flex'}}>
           <div style={{fontWeight:"bold"}}>
             <div>Full Names: </div>
             <div>Email: </div>
@@ -189,7 +206,7 @@ const [userData,setUserData] = useState([])
             <div>Department: </div>
             <div>Salary: </div>
           </div>
-          <div style={{marginLeft:'10px'}}>
+          <div style={{marginLeft:'50px'}}>
             <div>{userData.fullName}</div>
             <div>{userData.email}</div>
             <div>{userData.phoneNumber}</div>
@@ -199,6 +216,33 @@ const [userData,setUserData] = useState([])
           </div>
          </div>
          <button onClick={closeModal} style={{marginTop:'20px',border:'none',background:'red',color:'#fff',borderRadius:'3px',padding:'8px',fontWeight:'bold',cursor:'pointer',position:'relative',left:"50%"}}>Close</button>
+        </Modal>
+
+        {/* update modal */}
+        <Modal
+          isOpen={updateModalIsOpen}
+          onRequestClose={closeUpdateModal}
+          style={{
+            overlay: {
+              backgroundColor: "rgba(0, 0, 0, 0.5)",
+            },
+            content: {
+              top: "50%",
+              left: "60%",
+              right: "auto",
+              bottom: "auto",
+              marginRight: "-50%",
+              transform: "translate(-50%, -50%)",
+              width: "40%",
+              height: "auto",
+            },
+          }}
+        >
+
+
+          
+          
+         <button onClick={closeUpdateModal} style={{marginTop:'20px',border:'none',background:'red',color:'#fff',borderRadius:'3px',padding:'8px',fontWeight:'bold',cursor:'pointer',position:'relative',left:"50%"}}>Close</button>
         </Modal>
         <div className="myviewtbale">
           <table>
@@ -237,10 +281,10 @@ const [userData,setUserData] = useState([])
                         <td></td>
                       ) : (
                         <td>
-                          <AiFillDelete color="red" cursor={"pointer"} />
+                          <AiFillDelete color="red" cursor={"pointer"} onClick={()=>deleteUser(user._id)}/>
                         </td>
                       )}
-                      <td>
+                      <td onClick={openUpdateModal}>
                         <AiFillEdit color="#1E4FFD" cursor={"pointer"} />
                       </td>
                       <td onClick={()=>ViewDetails(user._id)}>

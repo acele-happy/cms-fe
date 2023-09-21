@@ -198,10 +198,10 @@ const ViewRequest = () => {
         <Link to="/createaccount" style={{ display: `${display}` }}>
           <AiOutlineTeam /> Add Users
         </Link>
-        <Link to="/viewusers">
+        <Link to="/viewusers" style={{ display: `${display}` }}>
           <AiOutlineTeam /> View Users
         </Link>
-        <Link to="/notficationreport">
+        <Link to="/notficationreport" style={{ display: `${display}` }}>
           <AiFillFolderOpen /> Manage Reports
         </Link>
         <Link to="" className="logout" onClick={logout}>
