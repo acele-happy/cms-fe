@@ -16,6 +16,7 @@ import {
 import profile from "../../../images/profile.png";
 import axios from "axios";
 import {useNavigate} from "react-router-dom"
+import logo from '../../../assets/logo.jpg'
 
 const DashboardHome = () => {
   const [name, setName] = useState("");
@@ -64,9 +65,10 @@ const DashboardHome = () => {
   return (
     <>
       <div id="mySidenav" className="sidenav">
-        <p className="dashlogo">
-          <span>C</span>-MS
-        </p>
+        <div style={{width:'50px',height:'50px',position:'relative',left:'100px',bottom:'20px'}}>
+          <img src={logo} alt="logo" style={{width:'50px',height:'50px'}}/>
+          <figcaption style={{fontSize:'10px',color:'#1E4FFD',width:'100px',fontWeight:'bold'}}>ISTM-Goma</figcaption>
+        </div>
 
         <Link to="/dashboardHome">
           <AiFillDashboard /> Dashboard
