@@ -21,7 +21,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import ReactPaginate from "react-paginate";
 import Modal from "react-modal";
-import logo from '../../../assets/logo.jpg'
+import logo from "../../../assets/logo.jpg";
 Modal.setAppElement("#root");
 
 const ManageReports = () => {
@@ -34,7 +34,8 @@ const ManageReports = () => {
   const [currentPage, setCurrentPage] = useState(0); // Current page of the table
   const usersPerPage = 4; // Number of users to display per page
 
-const [userData,setUserData] = useState([])
+  const [userData, setUserData] = useState([]);
+  const [updateData, setUpdateData] = useState([]);
 
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [updateModalIsOpen, setUpdateModalIsOpen] = useState(false);
@@ -94,34 +95,144 @@ const [userData,setUserData] = useState([])
     setUpdateModalIsOpen(false);
   };
 
-  const ViewDetails=(id)=>{
-    axios.get(`http://localhost:4040/user/getUserById/${id}`)
-    .then(res=>{
-        setUserData(res.data)
-        openModal()
-    })
-    .catch(err=>{
-        console.log(err)
-    })
-  }
+  const ViewDetails = (id) => {
+    axios
+      .get(`http://localhost:4040/user/getUserById/${id}`)
+      .then((res) => {
+        setUserData(res.data);
+        openModal();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
-  const deleteUser = (id)=>{
-    console.log(id)
-    axios.delete(`http://localhost:4040/user/delete/:${id}`)
-    .then(res=>{
+  const updateUser = (id) => {
+    axios
+      .get(`http://localhost:4040/user/getUserById/${id}`)
+      .then((res) => {
+        console.log(res.data);
+        setUpdateData(res.data);
+        openUpdateModal();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const deleteUser = (id) => {
+    console.log(id);
+    axios
+      .delete(`http://localhost:4040/user/delete/:${id}`)
+      .then((res) => {
+        window.location.reload();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  const [displayDepartment, setDisplayDepartment] = useState("none");
+  const [displaySalary, setDisplaySalary] = useState("none");
+  const [displayCourse, setDisplayCourse] = useState("none");
+  const [errors, setErrors] = useState("");
+  const [created, setCreated] = useState("");
+  const [success,setSuccess] = useState("")
+
+  const [formData, setFormData] = useState({
+    fullName: "",
+    email: "",
+    phoneNumber: "",
+    password: "",
+    role: "",
+    department: "",
+    salary: "",
+    course: "",
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    if (name === "role" && value === "LECTURER") {
+      setDisplaySalary("block");
+      setDisplayDepartment("block");
+      setDisplayCourse("block");
+    }
+    if (name === "role" && value != "FINANCE") {
+      if (displaySalary === "block") {
+        setDisplaySalary("none");
+        setDisplayCourse("none");
+        return;
+      }
+      setDisplayDepartment("block");
+    }
+
+    if (name === "role" && (value === "ACADEMICS" || value === "FINANCE")) {
+      setDisplayDepartment("none");
+      setDisplaySalary("none");
+      setDisplayCourse("none");
+    }
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  const handleSubmit = (id) => {
+  
+    axios
+      .put(`http://localhost:4040/user/updateById/:${id}`, formData)
+      .then((res) => {
+      setSuccess('Updated!')
       window.location.reload()
-    })
-    .catch(err=>{
-      console.log(err)
-    })
-  }
+      })
+      .catch((err) => {
+        console.log(err);
+        if (err.response.data.code == 11000) {
+          setErrors("Email Already exists!");
+        }
+      });
+  };
+
+  const clear = () => {
+    setFormData({
+      fullName: "",
+      email: "",
+      phoneNumber: "",
+      password: "",
+      role: "",
+      department: "",
+      salary: "",
+      course: "",
+    });
+  };
 
   return (
     <>
       <div id="mySidenav" className="sidenav">
-      <div style={{width:'50px',height:'50px',position:'relative',left:'100px',bottom:'20px'}}>
-          <img src={logo} alt="logo" style={{width:'50px',height:'50px'}}/>
-          <figcaption style={{fontSize:'10px',color:'#1E4FFD',width:'100px',fontWeight:'bold'}}>ISTM-Goma</figcaption>
+        <div
+          style={{
+            width: "50px",
+            height: "50px",
+            position: "relative",
+            left: "100px",
+            bottom: "20px",
+          }}
+        >
+          <img
+            src={logo}
+            alt="logo"
+            style={{ width: "50px", height: "50px" }}
+          />
+          <figcaption
+            style={{
+              fontSize: "10px",
+              color: "#1E4FFD",
+              width: "100px",
+              fontWeight: "bold",
+            }}
+          >
+            ISTM-Goma
+          </figcaption>
         </div>
 
         <Link to="/dashboardHome">
@@ -143,7 +254,7 @@ const [userData,setUserData] = useState([])
           <AiOutlineTeam /> Add Users
         </Link>
         <Link to="/viewusers" style={{ display: `${display}` }}>
-          <AiOutlineTeam /> View Users 
+          <AiOutlineTeam /> View Users
         </Link>
         <Link to="/notficationreport" style={{ display: `${display}` }}>
           <AiFillFolderOpen /> Manage Reports
@@ -197,26 +308,42 @@ const [userData,setUserData] = useState([])
             },
           }}
         >
-          <h2 style={{textAlign:'center'}}>{userData.fullName}'s Details</h2>
-         <div style={{display:'flex'}}>
-          <div style={{fontWeight:"bold"}}>
-            <div>Full Names: </div>
-            <div>Email: </div>
-            <div>Phone Number: </div>
-            <div>Course: </div>
-            <div>Department: </div>
-            <div>Salary: </div>
+          <h2 style={{ textAlign: "center" }}>{userData.fullName}'s Details</h2>
+          <div style={{ display: "flex" }}>
+            <div style={{ fontWeight: "bold" }}>
+              <div>Full Names: </div>
+              <div>Email: </div>
+              <div>Phone Number: </div>
+              <div>Course: </div>
+              <div>Department: </div>
+              <div>Salary: </div>
+            </div>
+            <div style={{ marginLeft: "50px" }}>
+              <div>{userData.fullName}</div>
+              <div>{userData.email}</div>
+              <div>{userData.phoneNumber}</div>
+              <div>{userData.course}</div>
+              <div>{userData.department}</div>
+              <div>{userData.salary}</div>
+            </div>
           </div>
-          <div style={{marginLeft:'50px'}}>
-            <div>{userData.fullName}</div>
-            <div>{userData.email}</div>
-            <div>{userData.phoneNumber}</div>
-            <div>{userData.course}</div>
-            <div>{userData.department}</div>
-            <div>{userData.salary}</div>
-          </div>
-         </div>
-         <button onClick={closeModal} style={{marginTop:'20px',border:'none',background:'red',color:'#fff',borderRadius:'3px',padding:'8px',fontWeight:'bold',cursor:'pointer',position:'relative',left:"50%"}}>Close</button>
+          <button
+            onClick={closeModal}
+            style={{
+              marginTop: "20px",
+              border: "none",
+              background: "red",
+              color: "#fff",
+              borderRadius: "3px",
+              padding: "8px",
+              fontWeight: "bold",
+              cursor: "pointer",
+              position: "relative",
+              left: "50%",
+            }}
+          >
+            Close
+          </button>
         </Modal>
 
         {/* update modal */}
@@ -239,11 +366,185 @@ const [userData,setUserData] = useState([])
             },
           }}
         >
+          <div style={{ textAlign: "center" }}>
+            <h2>Edit User Details</h2>
+            <p style={{ color: "red", textAlign: "center" }}>{errors}</p>
+            <p
+              style={{
+                color: "green",
+                textAlign: "center",
+                fontWeight: "bold",
+              }}
+            >
+              {success}
+            </p>
+            <form className="form-details">
+              <input
+                type="text"
+                placeholder={updateData.fullName}
+                className="inputbox"
+                required
+                name="fullName"
+                value={formData.fullName}
+                onChange={handleChange}
+                style={{
+                  border: "1px solid #ccc",
+                  position: "relative",
+                  right: "40px",
+                }}
+                
+              />
+              <input
+                type="email"
+                placeholder={updateData.email}
+                className="inputbox"
+                required
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                style={{
+                  border: "1px solid #ccc",
+                  position: "relative",
+                  right: "40px",
+                }}
+              />
+              <input
+                type="text"
+                placeholder={updateData.phoneNumber}
+                className="inputbox"
+                required
+                name="phoneNumber"
+                value={formData.phoneNumber}
+                style={{
+                  border: "1px solid #ccc",
+                  position: "relative",
+                  right: "40px",
+                }}
+                onChange={handleChange}
+              />
+              <input
+                type="password"
+                placeholder='....'
+                className="inputbox"
+                required
+                name="password"
+                value={formData.password}
+                style={{
+                  border: "1px solid #ccc",
+                  position: "relative",
+                  right: "40px",
+                }}
+                onChange={handleChange}
+              />
+              <select
+                className="inputbox"
+                name="role"
+                value={formData.role}
+                style={{
+                  border: "1px solid #ccc",
+                  position: "relative",
+                  right: "40px",
+                }}
+                onChange={handleChange}
+              >
+                {/* ["ACADEMICS", "LECTURER", "HOD", "CP", "FINANCE" */}
+                <option>{updateData.role}</option>
+                <option value="LECTURER">Lecturer</option>
+                <option value="HOD">HOD</option>
+                <option value="CP">CP</option>
+                <option value="FINANCE">Finance</option>
+              </select>
 
+              <input
+                type="text"
+                placeholder={updateData.department}
+                className="inputbox"
+                required
+                style={{
+                  display: `${displayDepartment}`,
+                  border: "1px solid #ccc",
+                  position: "relative",
+                  right: "40px",
+                }}
+                name="department"
+                value={formData.department}
+                onChange={handleChange}
+              />
+              <input
+                type="text"
+                placeholder={updateData.course}
+                className="inputbox"
+                required
+                style={{
+                  display: `${displayCourse}`,
+                  border: "1px solid #ccc",
+                  position: "relative",
+                  right: "40px",
+                }}
+                name="course"
+                value={formData.course}
+                onChange={handleChange}
+              />
+              <input
+                type="text"
+                placeholder={updateData.salary}
+                className="inputbox"
+                required
+                style={{
+                  display: `${displaySalary}`,
+                  border: "1px solid #ccc",
+                  position: "relative",
+                  right: "40px",
+                }}
+                name="salary"
+                value={formData.salary}
+                onChange={handleChange}
+              />
 
-          
-          
-         <button onClick={closeUpdateModal} style={{marginTop:'20px',border:'none',background:'red',color:'#fff',borderRadius:'3px',padding:'8px',fontWeight:'bold',cursor:'pointer',position:'relative',left:"50%"}}>Close</button>
+              <button
+                type="button"
+                className="sb-btn"
+                onClick={()=>handleSubmit(updateData._id)}
+                style={{ position: "relative", right: "50px" }}
+              >
+                Edit
+              </button>
+              <button
+                type="button"
+                style={{
+                  padding: "5px",
+                  marginLeft: "30px",
+                  width: "70px",
+                  border: "none",
+                  borderRadius: "5px",
+                  color: "white",
+                  background: "#ccc",
+                  cursor: "pointer",
+                }}
+                onClick={clear}
+              >
+                Clear
+              </button>
+            </form>
+          </div>
+
+          <button
+            onClick={closeUpdateModal}
+            style={{
+              marginTop: "20px",
+              border: "none",
+              background: "red",
+              color: "#fff",
+              borderRadius: "3px",
+              padding: "8px",
+              fontWeight: "bold",
+              cursor: "pointer",
+              position: "relative",
+              left: "50%",
+            }}
+          >
+            Close
+          </button>
         </Modal>
         <div className="myviewtbale">
           <table>
@@ -282,13 +583,17 @@ const [userData,setUserData] = useState([])
                         <td></td>
                       ) : (
                         <td>
-                          <AiFillDelete color="red" cursor={"pointer"} onClick={()=>deleteUser(user._id)}/>
+                          <AiFillDelete
+                            color="red"
+                            cursor={"pointer"}
+                            onClick={() => deleteUser(user._id)}
+                          />
                         </td>
                       )}
-                      <td onClick={openUpdateModal}>
+                      <td onClick={() => updateUser(user._id)}>
                         <AiFillEdit color="#1E4FFD" cursor={"pointer"} />
                       </td>
-                      <td onClick={()=>ViewDetails(user._id)}>
+                      <td onClick={() => ViewDetails(user._id)}>
                         <AiOutlineMenu color="#057e7e" cursor={"pointer"} />
                       </td>
                     </tr>
