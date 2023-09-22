@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./ViewUsersPage.scss";
-import { Link } from "react-router-dom";
+import { Form, Link } from "react-router-dom";
 import {
   AiFillDashboard,
   AiFillFolderOpen,
@@ -38,6 +38,7 @@ const ManageReports = () => {
   const [updateData, setUpdateData] = useState([]);
 
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [deleteModalIsOpen, setDeleteModalIsOpen] = useState(false);
   const [updateModalIsOpen, setUpdateModalIsOpen] = useState(false);
   const [displayDelete, setDisplayDelete] = useState("block");
 
@@ -87,6 +88,14 @@ const ManageReports = () => {
     setModalIsOpen(false);
   };
 
+  const openDeleteModal = () => {
+    setDeleteModalIsOpen(true);
+  };
+
+  const closeDeleteModal = () => {
+    setDeleteModalIsOpen(false);
+  };
+
   const openUpdateModal = () => {
     setUpdateModalIsOpen(true);
   };
@@ -113,6 +122,14 @@ const ManageReports = () => {
       .then((res) => {
         console.log(res.data);
         setUpdateData(res.data);
+        formData.fullName= updateData.fullName
+        formData.email= updateData.email
+        formData.password= updateData.password
+        formData.salary= updateData.salary
+        formData.role= updateData.role
+        formData.phoneNumber= updateData.phoneNumber
+        formData.department= updateData.department
+        formData.course= updateData.phoneNumber
         openUpdateModal();
       })
       .catch((err) => {
@@ -121,7 +138,6 @@ const ManageReports = () => {
   };
 
   const deleteUser = (id) => {
-    console.log(id);
     axios
       .delete(`http://localhost:4040/user/delete/:${id}`)
       .then((res) => {
@@ -209,31 +225,34 @@ const ManageReports = () => {
   return (
     <>
       <div id="mySidenav" className="sidenav">
-        <div
+      <div
           style={{
-            width: "50px",
-            height: "50px",
+            width: "100px",
+            height: "100px",
             position: "relative",
             left: "100px",
             bottom: "20px",
+            boxShadow: "5px 5px 10px rgba(30, 79, 253,0.5)",
+            marginBottom: "20px",
           }}
         >
           <img
             src={logo}
             alt="logo"
-            style={{ width: "50px", height: "50px" }}
+            style={{ width: "100px", height: "100px", borderRadius: "5px" }}
           />
           <figcaption
             style={{
-              fontSize: "10px",
+              fontSize: "20px",
               color: "#1E4FFD",
-              width: "100px",
+              width: "200px",
               fontWeight: "bold",
             }}
           >
             ISTM-Goma
           </figcaption>
         </div>
+
 
         <Link to="/dashboardHome">
           <AiFillDashboard /> Dashboard
@@ -346,6 +365,55 @@ const ManageReports = () => {
           </button>
         </Modal>
 
+        <Modal
+          isOpen={deleteModalIsOpen}
+          onRequestClose={closeDeleteModal}
+          style={{
+            overlay: {
+              backgroundColor: "rgba(0, 0, 0, 0.5)",
+            },
+            content: {
+              top: "50%",
+              left: "60%",
+              right: "auto",
+              bottom: "auto",
+              marginRight: "-50%",
+              transform: "translate(-50%, -50%)",
+              width: "40%",
+              height: "auto",
+            },
+          }}
+        >
+          <h3 style={{textAlign:'center'}}>Are you sure you want to delete this user? {userData.fullName}</h3>
+          <button style={{ marginTop: "20px",
+              border: "none",
+              background: "#1E4FFD",
+              color: "#fff",
+              borderRadius: "3px",
+              padding: "8px",
+              fontWeight: "bold",
+              cursor: "pointer",
+              position: "relative",
+              left: "40%",}} onClick={()=>deleteUser(user._id)}>Yes</button>
+          <button
+            onClick={closeDeleteModal}
+            style={{
+              marginTop: "20px",
+              border: "none",
+              background: "red",
+              color: "#fff",
+              borderRadius: "3px",
+              padding: "8px",
+              fontWeight: "bold",
+              cursor: "pointer",
+              position: "relative",
+              left: "50%",
+            }}
+          >
+            Close
+          </button>
+        </Modal>
+
         {/* update modal */}
         <Modal
           isOpen={updateModalIsOpen}
@@ -381,7 +449,7 @@ const ManageReports = () => {
             <form className="form-details">
               <input
                 type="text"
-                placeholder={updateData.fullName}
+                placeholder="Full Name"
                 className="inputbox"
                 required
                 name="fullName"
@@ -396,7 +464,7 @@ const ManageReports = () => {
               />
               <input
                 type="email"
-                placeholder={updateData.email}
+                placeholder="Email"
                 className="inputbox"
                 required
                 name="email"
@@ -410,7 +478,7 @@ const ManageReports = () => {
               />
               <input
                 type="text"
-                placeholder={updateData.phoneNumber}
+                placeholder="Telephone"
                 className="inputbox"
                 required
                 name="phoneNumber"
@@ -424,7 +492,7 @@ const ManageReports = () => {
               />
               <input
                 type="password"
-                placeholder='....'
+                placeholder='password'
                 className="inputbox"
                 required
                 name="password"
@@ -448,7 +516,7 @@ const ManageReports = () => {
                 onChange={handleChange}
               >
                 {/* ["ACADEMICS", "LECTURER", "HOD", "CP", "FINANCE" */}
-                <option>{updateData.role}</option>
+                <option>{formData.role}</option>
                 <option value="LECTURER">Lecturer</option>
                 <option value="HOD">HOD</option>
                 <option value="CP">CP</option>
@@ -457,7 +525,7 @@ const ManageReports = () => {
 
               <input
                 type="text"
-                placeholder={updateData.department}
+                placeholder="Department"
                 className="inputbox"
                 required
                 style={{
@@ -472,7 +540,7 @@ const ManageReports = () => {
               />
               <input
                 type="text"
-                placeholder={updateData.course}
+                placeholder="Course"
                 className="inputbox"
                 required
                 style={{
@@ -487,7 +555,7 @@ const ManageReports = () => {
               />
               <input
                 type="text"
-                placeholder={updateData.salary}
+                placeholder="Salary"
                 className="inputbox"
                 required
                 style={{
@@ -586,7 +654,7 @@ const ManageReports = () => {
                           <AiFillDelete
                             color="red"
                             cursor={"pointer"}
-                            onClick={() => deleteUser(user._id)}
+                            onClick={openDeleteModal}
                           />
                         </td>
                       )}

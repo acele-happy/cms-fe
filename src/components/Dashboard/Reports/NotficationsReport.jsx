@@ -18,6 +18,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import ReactPaginate from "react-paginate";
 import Modal from "react-modal";
+import logo from "../../../assets/logo.jpg";
 
 Modal.setAppElement("#root");
 
@@ -176,9 +177,33 @@ const NotificationsReport = () => {
   return (
     <>
       <div id="mySidenav" className="sidenav">
-        <p className="dashlogo">
-          <span>C</span>-MS
-        </p>
+        <div
+          style={{
+            width: "100px",
+            height: "100px",
+            position: "relative",
+            left: "100px",
+            bottom: "20px",
+            boxShadow: "5px 5px 10px rgba(30, 79, 253,0.5)",
+            marginBottom: "20px",
+          }}
+        >
+          <img
+            src={logo}
+            alt="logo"
+            style={{ width: "100px", height: "100px", borderRadius: "5px" }}
+          />
+          <figcaption
+            style={{
+              fontSize: "20px",
+              color: "#1E4FFD",
+              width: "200px",
+              fontWeight: "bold",
+            }}
+          >
+            ISTM-Goma
+          </figcaption>
+        </div>
 
         <Link to="/dashboardHome">
           <AiFillDashboard /> Dashboard
@@ -248,15 +273,41 @@ const NotificationsReport = () => {
               bottom: "auto",
               marginRight: "-50%",
               transform: "translate(-50%, -50%)",
-              width: "40%",
-              height: "100px",
               textAlign: "center",
               justifyContent: "center",
             },
           }}
         >
-          <h2 style={{ color: "#FF9494" }}>Error!</h2>
-          <div>{errorMessage}</div>
+          <div className="container-reportform">
+            <h2>Make Report Based on Date </h2>
+            <form className="form-details">
+              <div className="contain-field">
+                <input
+                  type="date"
+                  placeholder="From Date"
+                  className="inputboxs"
+                  required
+                  name="fromdate"
+                />
+                <input
+                  type="date"
+                  placeholder="To Date"
+                  className="inputboxs"
+                  required
+                  name="todate"
+                />
+              </div>
+
+              <button
+                type="button"
+                className="sb-btn"
+                style={{ marginRight: "150px" }}
+              >
+                Show Report
+              </button>
+            </form>
+          </div>
+
           <button
             onClick={closeModal}
             style={{
@@ -272,36 +323,11 @@ const NotificationsReport = () => {
           >
             Close
           </button>
-            </Modal>
-              
-            <div className="container-reportform">
-          <h2>Make Report Based on Date </h2>
-          <form className="form-details">
-            <div className="contain-field">
-            <input
-              type="date"
-              placeholder="From Date"
-              className="inputboxs"
-              required
-              name="fromdate"
-           
-            />
-            <input
-              type="date"
-              placeholder="To Date"
-              className="inputboxs"
-              required
-              name="todate"
-                          />
-              </div>
+        </Modal>
 
-            <button type="button" className="sb-btn" >
-              Show Report
-            </button>
-           
-          </form>
-        </div>
-
+        <button type="button" className="sb-btn" onClick={openModal}>
+          Show Report
+        </button>
         <div className="myviewtbale">
           <table>
             <tr>

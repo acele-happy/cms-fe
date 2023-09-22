@@ -65,10 +65,34 @@ const AddRequest = () => {
   return (
     <>
       <div id="mySidenav" className="sidenav">
-      <div style={{width:'50px',height:'50px',position:'relative',left:'100px',bottom:'20px'}}>
-          <img src={logo} alt="logo" style={{width:'50px',height:'50px'}}/>
-          <figcaption style={{fontSize:'10px',color:'#1E4FFD',width:'100px',fontWeight:'bold'}}>ISTM-Goma</figcaption>
+      <div
+          style={{
+            width: "100px",
+            height: "100px",
+            position: "relative",
+            left: "100px",
+            bottom: "20px",
+            boxShadow: "5px 5px 10px rgba(30, 79, 253,0.5)",
+            marginBottom: "20px",
+          }}
+        >
+          <img
+            src={logo}
+            alt="logo"
+            style={{ width: "100px", height: "100px", borderRadius: "5px" }}
+          />
+          <figcaption
+            style={{
+              fontSize: "20px",
+              color: "#1E4FFD",
+              width: "200px",
+              fontWeight: "bold",
+            }}
+          >
+            ISTM-Goma
+          </figcaption>
         </div>
+
 
         <Link to="/dashboardHome">
           <AiFillDashboard /> Dashboard
