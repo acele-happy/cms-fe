@@ -5,6 +5,7 @@ import Footer from "../Footer/Footer";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import DashboardHome from "../Dashboard/Home/DashboardHome";
+import logo from "../../assets/logo.jpg";
 
 const LoginForm = () => {
 
@@ -50,8 +51,15 @@ const LoginForm = () => {
     <>
       <div className="navbar-container">
         <Link to="#" className="logo">
-      C<span className="logocolor">M</span>S
+          
+          <img
+            src={logo}
+            alt="logo"
+            style={{ width: "130px", height: "90px", borderRadius: "5px" }}
+          />
+        
         </Link>
+        <div className="logoName"> ISTM-<span className="logocolor">Goma</span></div>
 
         <ul className="nav-links">
           <li className="nav-item">
