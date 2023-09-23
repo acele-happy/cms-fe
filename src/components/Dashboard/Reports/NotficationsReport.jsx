@@ -58,19 +58,22 @@ const NotificationsReport = () => {
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
   const [searchData, setSearchData] = useState([]);
+  const [noData,setNoData] = useState("")
 
   const searchByDate = () => {
-    console.log(from)
     axios
       .post("http://localhost:4040/user/searchByDate", {
         fromDate: from,
         toDate: to,
       })
       .then((res) => {
-        console.log(res);
+        if(res.data.length == 0){
+          setNoData("No Notification in Date Range!")
+        }
         const d = res.data;
         setSearchData(d);
         setLoading(false);
+        setNoData("")
       })
       .catch((err) => {
         console.log(err);
@@ -147,61 +150,6 @@ const NotificationsReport = () => {
     setModalIsOpen(false);
   };
 
-  const confirmRequestCp = (index, Notid) => {
-    axios
-      .post(`http://localhost:4040/user/confirmPaymentCP/:${Notid}`)
-      .then((res) => {
-        const updatedApprovedCpArray = [...approvedcpArray];
-        updatedApprovedCpArray[index] = true;
-        setApprovedcpArray(updatedApprovedCpArray);
-      })
-      .catch((err) => {
-        setErrorMessage(err.response.data);
-        openModal();
-      });
-  };
-
-  const confirmRequestHod = (index, Notid) => {
-    axios
-      .post(`http://localhost:4040/user/confirmPaymentHOD/:${Notid}`)
-      .then((res) => {
-        const updatedApprovedhodArray = [...approvedhodArray];
-        updatedApprovedhodArray[index] = true;
-        setApprovedhodArray(updatedApprovedhodArray);
-      })
-      .catch((err) => {
-        setErrorMessage(err.response.data);
-        openModal();
-      });
-  };
-
-  const confirmRequestAcademic = (index, Notid) => {
-    axios
-      .post(`http://localhost:4040/user/confirmPaymentAcademic/:${Notid}`)
-      .then((res) => {
-        const updatedApprovedacademicArray = [...approvedacademicArray];
-        updatedApprovedacademicArray[index] = true;
-        setApprovedacademicArray(updatedApprovedacademicArray);
-      })
-      .catch((err) => {
-        setErrorMessage(err.response.data);
-        openModal();
-      });
-  };
-
-  const confirmRequestFinance = (index, Notid) => {
-    axios
-      .post(`http://localhost:4040/user/confirmPaymentFinance/:${Notid}`)
-      .then((res) => {
-        const updatedApprovedfinanceArray = [...approvedfinanceArray];
-        updatedApprovedfinanceArray[index] = true;
-        setApprovedfinanceArray(updatedApprovedfinanceArray);
-      })
-      .catch((err) => {
-        setErrorMessage(err.response.data);
-        openModal();
-      });
-  };
 
   return (
     <>
@@ -363,6 +311,7 @@ const NotificationsReport = () => {
           Show Report
         </button>
         <div className="myviewtbale">
+          <h2 style={{textAlign:'center',color:'red',fontWeight:'bold'}}>{noData}</h2>
           <table>
             <tr>
               <th>No</th>

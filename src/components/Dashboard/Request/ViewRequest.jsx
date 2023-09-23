@@ -173,6 +173,21 @@ const ViewRequest = () => {
       });
   };
 
+
+  const [filterText, setFilterText] = useState('');
+  const [filteredUsers, setFilteredUsers] = useState([]);
+  
+  const filterUsers = () => {
+    const filtered = data.filter((user) =>
+      user.names.toLowerCase().includes(filterText.toLowerCase())
+    );
+    setFilteredUsers(filtered);
+  };
+  
+  useEffect(() => {
+    filterUsers();
+  }, [filterText]);
+
   return (
     <>
       <div id="mySidenav" className="sidenav">
@@ -297,6 +312,12 @@ const ViewRequest = () => {
             Close
           </button>
         </Modal>
+
+        <input
+          type="text"
+          placeholder="Search by Name" className="mysearch" value={filterText}
+          onChange={(e) => setFilterText(e.target.value)} />
+        
         <div className="myviewtbale">
           <table>
             <tr>
@@ -313,7 +334,7 @@ const ViewRequest = () => {
               <p style={{ fontWeight: "bold" }} className="loading-text"></p>
             ) : (
               <tbody>
-                {data
+                {(filterText.trim() === '' ? data : filteredUsers)
                   .slice(startIndex, startIndex + usersPerPage)
                   .map((user, index) => (
                     <tr key={index}>

@@ -44,6 +44,21 @@ const ManageReports = () => {
   const [deleteId, setDeleteId] = useState("")
   const [deleteName, setDeleteName] = useState("")
 
+  const [filterText, setFilterText] = useState('');
+const [filteredUsers, setFilteredUsers] = useState([]);
+
+const filterUsers = () => {
+  const filtered = data.filter((user) =>
+    user.fullName.toLowerCase().includes(filterText.toLowerCase())
+  );
+  setFilteredUsers(filtered);
+};
+
+useEffect(() => {
+  filterUsers();
+}, [filterText]);
+
+
   const handlePageClick = ({ selected }) => {
     setCurrentPage(selected);
   };
@@ -335,8 +350,11 @@ const ManageReports = () => {
           }}
         >
           <h2 style={{ textAlign: "center" }}>{userData.fullName}'s Details</h2>
-          <div style={{ display: "flex",marginLeft:'100px' }}>
+          <div style={{ display: "flex", marginLeft: '100px' }}>
+              
+
             <div>
+              
               <div><span style={{ fontWeight: "bold" }}>Full Names: </span> <span>{userData.fullName}</span></div>
               <div><span style={{ fontWeight: "bold" }}>Email: </span> <span>{userData.email}</span></div>
               <div><span style={{ fontWeight: "bold" }}>Phone Number: </span><span>{userData.phoneNumber}</span> </div>
@@ -613,6 +631,11 @@ const ManageReports = () => {
             Close
           </button>
         </Modal>
+
+        <input
+          type="text"
+          placeholder="Search by Name" className="mysearch" value={filterText}
+          onChange={(e) => setFilterText(e.target.value)}/>
         <div className="myviewtbale">
           <table>
             <tr>
@@ -629,7 +652,7 @@ const ManageReports = () => {
               <p style={{ fontWeight: "bold" }} className="loading-text"></p>
             ) : (
               <tbody>
-                {data
+                {(filterText.trim() === '' ? data : filteredUsers)
                   .slice(startIndex, startIndex + usersPerPage)
                   .map((user, index) => (
                     <tr key={index}>
@@ -685,7 +708,7 @@ const ManageReports = () => {
             nextClassName={"pagination-button"}
           />
         </div>
-        <div class="clearfix"></div>
+        <div className="clearfix"></div>
         <br />
         <br />
 
