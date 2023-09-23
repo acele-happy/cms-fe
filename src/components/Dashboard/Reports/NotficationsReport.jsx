@@ -55,6 +55,35 @@ const NotificationsReport = () => {
 
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [from, setFrom] = useState("");
+  const [to, setTo] = useState("");
+  const [searchData, setSearchData] = useState([]);
+
+  const searchByDate = () => {
+    console.log(from)
+    axios
+      .post("http://localhost:4040/user/searchByDate", {
+        fromDate: from,
+        toDate: to,
+      })
+      .then((res) => {
+        console.log(res);
+        const d = res.data;
+        setSearchData(d);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const handleFromChange = (e) => {
+    setFrom(e.target.value);
+  };
+
+  const handleToChange = (e) => {
+    setTo(e.target.value);
+  };
 
   const handlePageClick = ({ selected }) => {
     setCurrentPage(selected);
@@ -287,14 +316,18 @@ const NotificationsReport = () => {
                   placeholder="From Date"
                   className="inputboxs"
                   required
-                  name="fromdate"
+                  name="fromDate"
+                  onChange={handleFromChange}
+                  value={from}
                 />
                 <input
                   type="date"
                   placeholder="To Date"
                   className="inputboxs"
                   required
-                  name="todate"
+                  name="toDate"
+                  onChange={handleToChange}
+                  value={to}
                 />
               </div>
 
@@ -302,6 +335,7 @@ const NotificationsReport = () => {
                 type="button"
                 className="sb-btn"
                 style={{ marginRight: "150px" }}
+                onClick={searchByDate}
               >
                 Show Report
               </button>
@@ -344,7 +378,7 @@ const NotificationsReport = () => {
               <p style={{ fontWeight: "bold" }} className="loading-text"></p>
             ) : (
               <tbody>
-                {data
+                {searchData
                   .slice(startIndex, startIndex + usersPerPage)
                   .map((user, index) => (
                     <tr key={index}>
@@ -353,166 +387,12 @@ const NotificationsReport = () => {
                       <td>{user.email}</td>
                       <td>{user.message}</td>
 
-                      <td
-                        style={{
-                          color: "#ff0000",
-                        }}
-                      >
-                        <div style={{ display: `${dispaybtncp}` }}>
-                          {user.cp === "Approved" ? (
-                            <span style={{ color: "green" }}>Approved</span>
-                          ) : (
-                            <button
-                              style={{
-                                backgroundColor: approvedcpArray[index]
-                                  ? "#035603"
-                                  : "#008000",
-                                border: "none",
-                                padding: "5px",
-                                borderRadius: "3px",
-                                color: "#fff",
-                                cursor: "pointer",
-                              }}
-                              onClick={() =>
-                                confirmRequestCp(index, user.notId)
-                              }
-                              disabled={approvedcpArray[index]}
-                            >
-                              {approvedcpArray[index] ? "Approved" : "Approve"}
-                            </button>
-                          )}
-                        </div>
-                        <span
-                          style={{
-                            display: `${displaypendingcp}`,
-                            color: user.cp === "Approved" ? "green" : "red",
-                          }}
-                        >
-                          {user.cp}
-                        </span>
-                      </td>
-                      <td
-                        style={{
-                          color: "#ff0000",
-                        }}
-                      >
-                        <div style={{ display: `${dispaybtnhod}` }}>
-                          {user.hod === "Approved" ? (
-                            <span style={{ color: "green" }}>Approved</span>
-                          ) : (
-                            <button
-                              style={{
-                                backgroundColor: approvedhodArray[index]
-                                  ? "#035603"
-                                  : "#008000",
-                                border: "none",
-                                padding: "5px",
-                                borderRadius: "3px",
-                                color: "#fff",
-                                cursor: "pointer",
-                              }}
-                              onClick={() =>
-                                confirmRequestHod(index, user.notId)
-                              }
-                              disabled={approvedhodArray[index]}
-                            >
-                              {approvedhodArray[index] ? "Approved" : "Approve"}
-                            </button>
-                          )}
-                        </div>
-                        <span
-                          style={{
-                            display: `${displaypendinghod}`,
-                            color: user.hod === "Approved" ? "green" : "red",
-                          }}
-                        >
-                          {user.hod}
-                        </span>
-                      </td>
+                      <td>{user.cp}</td>
+                      <td>{user.hod}</td>
 
-                      <td
-                        style={{
-                          color: "#ff0000",
-                        }}
-                      >
-                        <div style={{ display: `${dispaybtnacademic}` }}>
-                          {user.academic === "Approved" ? (
-                            <span style={{ color: "green" }}>Approved</span>
-                          ) : (
-                            <button
-                              style={{
-                                backgroundColor: approvedacademicArray[index]
-                                  ? "#035603"
-                                  : "#008000",
-                                border: "none",
-                                padding: "5px",
-                                borderRadius: "3px",
-                                color: "#fff",
-                                cursor: "pointer",
-                              }}
-                              onClick={() =>
-                                confirmRequestAcademic(index, user.notId)
-                              }
-                              disabled={approvedacademicArray[index]}
-                            >
-                              {approvedacademicArray[index]
-                                ? "Approved"
-                                : "Approve"}
-                            </button>
-                          )}
-                        </div>
-                        <span
-                          style={{
-                            display: `${displaypendingacademic}`,
-                            color:
-                              user.academic === "Approved" ? "green" : "red",
-                          }}
-                        >
-                          {user.academic}
-                        </span>
-                      </td>
+                      <td>{user.academic}</td>
 
-                      <td
-                        style={{
-                          color: "#ff0000",
-                        }}
-                      >
-                        <div style={{ display: `${dispaybtnfinance}` }}>
-                          {user.finance === "Approved" ? (
-                            <span style={{ color: "green" }}>Approved</span>
-                          ) : (
-                            <button
-                              style={{
-                                backgroundColor: approvedfinanceArray[index]
-                                  ? "#035603"
-                                  : "#008000",
-                                border: "none",
-                                padding: "5px",
-                                borderRadius: "3px",
-                                color: "#fff",
-                                cursor: "pointer",
-                              }}
-                              onClick={() =>
-                                confirmRequestFinance(index, user.notId)
-                              }
-                              disabled={approvedfinanceArray[index]}
-                            >
-                              {approvedfinanceArray[index]
-                                ? "Approved"
-                                : "Approve"}
-                            </button>
-                          )}
-                        </div>
-                        <span
-                          style={{
-                            display: `${displaypendingfinance}`,
-                            color:
-                              user.finance === "Approved" ? "green" : "red",
-                          }}
-                        >
-                          {user.finance}
-                        </span>
-                      </td>
+                      <td>{user.finance}</td>
                     </tr>
                   ))}
               </tbody>
