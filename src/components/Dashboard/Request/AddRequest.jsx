@@ -24,6 +24,7 @@ const AddRequest = () => {
   const [userId,setUserId] = useState("")
   const [success,setSuccess] = useState("")
   const [error, setError] = useState("")
+  const [display,setDisplay] = useState("block")
 
   useEffect(()=>{
     const token = localStorage.getItem("token");
@@ -32,7 +33,11 @@ const AddRequest = () => {
     setName(decoded.name);
     setRole(decoded.role);
     setUserId(decoded.id)
-  })
+
+    if (decoded.role != "ACADEMICS") {
+      setDisplay("none");
+    }
+  },[])
 
   const logout = () => {
     localStorage.clear();
@@ -46,6 +51,7 @@ const AddRequest = () => {
     console.log('hehe')
     axios.post(`http://localhost:4040/user/claimSalary/:${userId}`,{message:message})
     .then(res=>{
+      console.log(res.data)
       setSuccess(res.data)
       setMessage("")
       setTimeout(()=>{
@@ -54,6 +60,7 @@ const AddRequest = () => {
     })
     .catch(err=>{
       // alert(err.response.data)
+      console.log(err)
       setError(err.response.data)
     })
   }
@@ -105,10 +112,10 @@ const AddRequest = () => {
         <Link to="/showRequest">
           <AiOutlinePullRequest /> View Requests
         </Link>
-        <Link to="/viewusers">
+        <Link to="/viewusers"  style={{ display: `${display}` }}>
           <AiOutlineTeam /> View Users 
         </Link>
-        <Link to="/notficationreport">
+        <Link to="/notficationreport"  style={{ display: `${display}` }}>
           <AiFillFolderOpen /> Manage Reports
         </Link>
 
