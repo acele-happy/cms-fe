@@ -125,15 +125,18 @@ const ManageReports = () => {
       .get(`http://localhost:4040/user/getUserById/${id}`)
       .then((res) => {
         console.log(res.data);
-        setUpdateData(res.data);
-        formData.fullName= updateData.fullName
-        formData.email= updateData.email
-        formData.password= updateData.password
-        formData.salary= updateData.salary
-        formData.role= updateData.role
-        formData.phoneNumber= updateData.phoneNumber
-        formData.department= updateData.department
-        formData.course= updateData.phoneNumber
+        const userData = res.data
+        setUpdateData(userData);
+       setFormData({
+        fullName: userData.fullName,
+        email: userData.email,
+        password: userData.password,
+        salary: userData.salary,
+        role: userData.role,
+        phoneNumber: userData.phoneNumber,
+        department: userData.department,
+        course: userData.course
+       })
         openUpdateModal();
       })
       .catch((err) => {
@@ -662,8 +665,8 @@ const ManageReports = () => {
                           />
                         </td>
                       )}
-                      <td onClick={() => updateUser(user._id)}>
-                        <AiFillEdit color="#1E4FFD" cursor={"pointer"} />
+                      <td>
+                        <AiFillEdit type="button" color="#1E4FFD" cursor={"pointer"} onClick={() => updateUser(user._id)}/>
                       </td>
                       <td onClick={() => ViewDetails(user._id)}>
                         <AiOutlineMenu color="#057e7e" cursor={"pointer"} />

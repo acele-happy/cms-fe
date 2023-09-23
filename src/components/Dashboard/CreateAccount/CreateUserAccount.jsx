@@ -45,13 +45,31 @@ const CreateUserAccount = () => {
       setDisplayDepartment("block")
       setDisplayCourse("block")
     }
-    if(name === 'role' &&value!="FINANCE"){
+    if(name === 'role' &&value==="FINANCE"){
       if(displaySalary === "block"){
         setDisplaySalary("none")
         setDisplayCourse("none")
+        setDisplayDepartment("none")
         return
       }
-      setDisplayDepartment("block")
+    }
+
+    if(name==='role' && value=="CP"){
+      setDisplayCourse('block')
+      setDisplayDepartment('block')
+      if(displaySalary==='block'){
+        setDisplaySalary('none')
+      }
+    }
+
+    if(name==='role' && value=="HOD"){
+      setDisplayDepartment('block')
+      if(displaySalary==='block'){
+        setDisplaySalary('none')
+      }
+      if(displayCourse === "block"){
+        setDisplayCourse('none')
+      }
     }
 
     if(name==='role' && (value === "ACADEMICS" || value === "FINANCE")){
@@ -92,9 +110,9 @@ const CreateUserAccount = () => {
     .then(res=>{
       setErrors("")
       setCreated("Created!")
-      // setTimeout(()=>{
-      //   setCreated("")
-      // },5000)
+      setTimeout(()=>{
+        setCreated("")
+      },5000)
     })
     .catch(err=>{
       console.log(err)
