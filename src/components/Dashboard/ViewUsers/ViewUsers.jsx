@@ -55,7 +55,6 @@ const ManageReports = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    console.log(jwtDecode(token));
     const decoded = jwtDecode(token);
     if (decoded.role != "ACADEMICS") {
       setDisplay("none");
@@ -112,7 +111,9 @@ const ManageReports = () => {
     axios
       .get(`http://localhost:4040/user/getUserById/${id}`)
       .then((res) => {
-        setUserData(res.data);
+        const data = res.data
+        setUserData(data);
+        console.log(userData)
         openModal();
       })
       .catch((err) => {
@@ -124,7 +125,6 @@ const ManageReports = () => {
     axios
       .get(`http://localhost:4040/user/getUserById/${id}`)
       .then((res) => {
-        console.log(res.data);
         const userData = res.data
         setUpdateData(userData);
        setFormData({
@@ -335,22 +335,14 @@ const ManageReports = () => {
           }}
         >
           <h2 style={{ textAlign: "center" }}>{userData.fullName}'s Details</h2>
-          <div style={{ display: "flex" }}>
-            <div style={{ fontWeight: "bold" }}>
-              <div>Full Names: </div>
-              <div>Email: </div>
-              <div>Phone Number: </div>
-              <div>Course: </div>
-              <div>Department: </div>
-              <div>Salary: </div>
-            </div>
-            <div style={{ marginLeft: "50px" }}>
-              <div>{userData.fullName}</div>
-              <div>{userData.email}</div>
-              <div>{userData.phoneNumber}</div>
-              <div>{userData.course}</div>
-              <div>{userData.department}</div>
-              <div>{userData.salary}</div>
+          <div style={{ display: "flex",marginLeft:'100px' }}>
+            <div>
+              <div><span style={{ fontWeight: "bold" }}>Full Names: </span> <span>{userData.fullName}</span></div>
+              <div><span style={{ fontWeight: "bold" }}>Email: </span> <span>{userData.email}</span></div>
+              <div><span style={{ fontWeight: "bold" }}>Phone Number: </span><span>{userData.phoneNumber}</span> </div>
+              <div><span style={{ fontWeight: "bold" }}>Course: </span><span>{userData.course}</span> </div>
+              <div><span style={{ fontWeight: "bold" }}>Department: </span><span>{userData.department}</span> </div>
+              <div><span style={{ fontWeight: "bold" }}>Salary: </span><span>{userData.salary}</span> </div>
             </div>
           </div>
           <button
