@@ -41,6 +41,8 @@ const ManageReports = () => {
   const [deleteModalIsOpen, setDeleteModalIsOpen] = useState(false);
   const [updateModalIsOpen, setUpdateModalIsOpen] = useState(false);
   const [displayDelete, setDisplayDelete] = useState("block");
+  const [deleteId, setDeleteId] = useState("")
+  const [deleteName, setDeleteName] = useState("")
 
   const handlePageClick = ({ selected }) => {
     setCurrentPage(selected);
@@ -88,8 +90,10 @@ const ManageReports = () => {
     setModalIsOpen(false);
   };
 
-  const openDeleteModal = () => {
+  const openDeleteModal = (id,dname) => {
     setDeleteModalIsOpen(true);
+    setDeleteId(id);
+    setDeleteName(dname)
   };
 
   const closeDeleteModal = () => {
@@ -196,7 +200,7 @@ const ManageReports = () => {
   const handleSubmit = (id) => {
   
     axios
-      .put(`http://localhost:4040/user/updateById/:${id}`, formData)
+      .patch(`http://localhost:4040/user/updateById/:${id}`, formData)
       .then((res) => {
       setSuccess('Updated!')
       window.location.reload()
@@ -384,7 +388,7 @@ const ManageReports = () => {
             },
           }}
         >
-          <h3 style={{textAlign:'center'}}>Are you sure you want to delete this user? {userData.fullName}</h3>
+          <h3 style={{textAlign:'center'}}>Are you sure you want to delete <span style={{color:'#1e4ffd'}}>{deleteName}</span> </h3>
           <button style={{ marginTop: "20px",
               border: "none",
               background: "#1E4FFD",
@@ -394,7 +398,7 @@ const ManageReports = () => {
               fontWeight: "bold",
               cursor: "pointer",
               position: "relative",
-              left: "40%",}} onClick={()=>deleteUser(user._id)}>Yes</button>
+              left: "40%",}} onClick={()=>deleteUser(deleteId)}>Yes</button>
           <button
             onClick={closeDeleteModal}
             style={{
@@ -516,7 +520,7 @@ const ManageReports = () => {
                 onChange={handleChange}
               >
                 {/* ["ACADEMICS", "LECTURER", "HOD", "CP", "FINANCE" */}
-                <option>{formData.role}</option>
+                <option>select</option>
                 <option value="LECTURER">Lecturer</option>
                 <option value="HOD">HOD</option>
                 <option value="CP">CP</option>
@@ -654,7 +658,7 @@ const ManageReports = () => {
                           <AiFillDelete
                             color="red"
                             cursor={"pointer"}
-                            onClick={openDeleteModal}
+                            onClick={()=>openDeleteModal(user._id,user.fullName)}
                           />
                         </td>
                       )}

@@ -90,6 +90,7 @@ const CreateUserAccount = () => {
     console.log('hee')
     axios.post("http://localhost:4040/user/register",formData)
     .then(res=>{
+      setErrors("")
       setCreated("Created!")
       // setTimeout(()=>{
       //   setCreated("")

@@ -12,7 +12,7 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        height: 70px;
+        height: 100px;
         box-shadow: 0px 15px 10px -20px rgb(30, 79, 253); 
       }
 
@@ -23,9 +23,19 @@
     color:#000000;
     font-size: 20px;
     margin-left: 100px;
+    padding: 10px;
+   
 }
+
+.logoName{
+  margin-right:35%;
+  font-size: 24px;
+  font-weight: 700;
+}
+
 .logocolor{
     color: #1E4FFD;
+    
 }
 
 .nav-links {
@@ -38,6 +48,7 @@
   padding: 10px 15px;
   text-decoration: none;
   color:#000000;
+  font-weight: 700;
 }
 
 .nav-item:hover {

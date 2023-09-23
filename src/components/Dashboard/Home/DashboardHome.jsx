@@ -65,7 +65,7 @@ const DashboardHome = () => {
   return (
     <>
       <div id="mySidenav" className="sidenav">
-        <div
+      <div
           style={{
             width: "100px",
             height: "100px",
@@ -92,7 +92,6 @@ const DashboardHome = () => {
             ISTM-Goma
           </figcaption>
         </div>
-
         <Link to="/dashboardHome">
           <AiFillDashboard /> Dashboard
         </Link>
